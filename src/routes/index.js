@@ -1,0 +1,32 @@
+'use strict';
+
+const express = require('express');
+const asyncHandler = require('../utils/asyncHandler');
+const authRoutes = require('./auth.routes.js');
+const userRoutes = require('./user.routes.js');
+const departRoutes = require('./department.routes.js');
+const designationRoutes = require('./designation.routes.js');
+const { health } = require('../controllers/health.controller.js');
+const roleRoutes = require('./roles.routes.js');
+const qualificationRoutes = require('./qualification.routes.js');
+const skillsRoutes = require('./skills.routes.js');
+const holidayRoutes = require('./holiday.routes.js');
+const employeeRoutes = require('./employee.routes.js');
+const clientRoutes = require('./client.routes.js');
+
+const router = express.Router();
+
+router.get('/health', asyncHandler(health));
+router.use('/auth', authRoutes);
+router.use('/user', userRoutes);
+router.use('/department', departRoutes);
+router.use('/designation', designationRoutes);
+router.use('/roles', roleRoutes);
+router.use('/qualification', qualificationRoutes);
+router.use('/skills', skillsRoutes);
+router.use('/holiday', holidayRoutes);
+router.use('/client', clientRoutes);
+router.use('/employee', employeeRoutes);
+// router.use('/', roleRoutes);
+
+module.exports = router;
