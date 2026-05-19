@@ -16,7 +16,7 @@ async function AddEditSkill(req, res) {
 
 async function getAllSkills(req, res) {
     const result = await getSkills();
-    if (!result || result.length === 0) {
+   if (!Array.isArray(result) || result.length === 0){
         return res.success({
             data: [],
             message: 'No Data Found'

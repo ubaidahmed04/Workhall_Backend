@@ -6,9 +6,19 @@ const logger = require('../config/logger');
 
 async function addBranch(payload, actor) {
 
+    const toNumberOrNull = (v) =>
+        v === "" || v === undefined || v === null
+            ? null
+            : Number(v);
+
     const {
-        vskillid,
-        vskillname,
+        vbranchid,
+        vbranchname,
+        vlocation,
+        vfloors,
+        vlongitude,
+        vlatitude,
+        vradius,
         vstatus
     } = payload;
 
@@ -16,41 +26,53 @@ async function addBranch(payload, actor) {
 
         const result = await conn.execute(
             `BEGIN
-                add_edit_skill(
-                    :vskillid,
-                    :vskillname,
+                add_edit_branch(
+                    :vbranchid,
+                    :vbranchname,
+                    :vlocation,
+                    :vfloors,
+                    :vlongitude,
+                    :vlatitude,
+                    :vradius,
                     :vstatus,
                     :vcreatedby,
                     :vmessage
                 );
             END;`,
             {
-                vskillid: vskillid || null,
-                vskillname,
-                vstatus,
-                // logged in user
+                vbranchid: toNumberOrNull(vbranchid),
+                vbranchname: vbranchname || null,
+                vlocation: vlocation || null,
+                vfloors: toNumberOrNull(vfloors),
+                vlongitude: toNumberOrNull(vlongitude),
+                vlatitude: toNumberOrNull(vlatitude),
+                vradius: toNumberOrNull(vradius),
+                vstatus: vstatus !== undefined ? Number(vstatus) : 0,
                 vcreatedby: actor,
-                // OUT parameter
                 vmessage: {
                     dir: oracledb.BIND_OUT,
-                    type: oracledb.STRING
+                    type: oracledb.STRING,
+                    maxSize: 500
                 }
+            },
+            {
+                autoCommit: true
             }
         );
+
         logger.debug(result);
         const message = result?.outBinds?.vmessage;
-        return {
-            message
-        };
+        return message
     });
 }
 
 async function getBranches() {
-    logger.info('Fetching skills list');
+
+    logger.info('Fetching branches list');
     return withConnection(async (conn) => {
         const result = await conn.execute(
             `BEGIN
-                get_skills(:retval);
+                get_branch(:retval);
             END;`,
             {
                 retval: {
@@ -59,18 +81,26 @@ async function getBranches() {
                 }
             }
         );
+
         const resultSet = result.outBinds.retval;
-        const rows = await resultSet.getRows(); // fetch all rows
+        const rows = await resultSet.getRows();
         await resultSet.close();
         logger.debug(rows);
+
         return rows.map(row => ({
-            skillid: row.SKILLID,
-            skillname: row.SKILLNAME,
-            status: row.STATUS
+            branchid: row.BRANCHID,
+            branchname: row.BRANCHNAME,
+            location: row.LOCATION,
+            floors: row.FLOORS,
+            longitude: row.LONGITUDE,
+            latitude: row.LATITUDE,
+            radius: row.RADIUS,
+            status: row.STATUS,
+            createdby: row.CREATEDBY,
+            editby: row.EDITBY
         }));
     });
 }
-
 
 module.exports = {
     addBranch,

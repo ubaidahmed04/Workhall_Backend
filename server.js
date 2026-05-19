@@ -9,6 +9,8 @@ const app = require('./src/app');
 const { initPool, closePool } = require('./src/database/oraclePool');
 const logger = require('./src/config/logger');
 
+
+
 async function shutdown(signal) {
   logger.info(`Received ${signal}, closing server and pool`);
   try {

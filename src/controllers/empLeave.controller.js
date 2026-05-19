@@ -1,12 +1,12 @@
 'use strict';
 
 const httpStatus = require('../constants/httpStatus');
-const { addEditDesig, getDesignation } = require('../services/designation.service');
+const { addEditEmpLeave, getEmpLeaves } = require('../services/empLeave.service');
 
-async function addEditDesignation(req, res) {
+async function AddEditEmpLeave(req, res) {
   try {
     const actorId = req.user?.userid || 'SYSTEM';
-    const result = await addEditDesig(req.body, actorId);
+    const result = await addEditEmpLeave(req.body, actorId);
 
     if (!result) {
       return res.error({ message: 'No Data Found' }, httpStatus.NOT_FOUND);
@@ -17,23 +17,23 @@ async function addEditDesignation(req, res) {
     }
 
     if (result?.status === false) {
-      return res.error({ message: result?.message || 'Failed to save designation' }, httpStatus.BAD_REQUEST);
+      return res.error({ message: result?.message || 'Failed to save employee leave' }, httpStatus.BAD_REQUEST);
     }
 
     return res.success({
       data: result,
-      message: result?.message || 'Designation saved successfully'
+      message: result?.message || 'Employee leave saved successfully'
     }, httpStatus.OK);
 
   } catch (error) {
-    console.log('addEditDesignation Error =>', error);
+    console.log('AddEditEmpLeave Error =>', error);
     return res.error({ message: 'Internal Server Error' }, httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
-async function getAllDesignation(req, res) {
+async function GetEmpLeaves(req, res) {
   try {
-    const result = await getDesignation();
+    const result = await getEmpLeaves();
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
       return res.error({ message: 'Network Error! Database not connected' }, httpStatus.SERVICE_UNAVAILABLE);
@@ -45,16 +45,16 @@ async function getAllDesignation(req, res) {
 
     return res.success({
       data: result,
-      message: 'Designation fetched successfully'
+      message: 'Employee leaves fetched successfully'
     }, httpStatus.OK);
 
   } catch (error) {
-    console.log('getAllDesignation Error =>', error);
+    console.log('GetEmpLeaves Error =>', error);
     return res.error({ message: 'Internal Server Error' }, httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
 module.exports = {
-  addEditDesignation,
-  getAllDesignation
+  AddEditEmpLeave,
+  GetEmpLeaves
 };

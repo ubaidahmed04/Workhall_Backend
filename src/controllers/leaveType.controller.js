@@ -1,43 +1,36 @@
 'use strict';
 
 const httpStatus = require('../constants/httpStatus');
-const { addClient, getClients } = require('../services/client.service');
+const { addEditLeaveType, getLeaveTypes } = require('../services/leavetype.service');
 
-async function AddEditClient(req, res) {
+async function AddEditLeaveType(req, res) {
   try {
-
     const actorId = req.user?.userid || 'SYSTEM';
+    const result = await addEditLeaveType(req.body, actorId);
 
-    const result = await addClient(req.body, actorId);
-
-    // No response from service
     if (!result) {
-      return res.error({
-        message: 'No Data Found'
-      }, httpStatus.NOT_FOUND);
+      return res.error({ message: 'No Data Found' }, httpStatus.NOT_FOUND);
     }
 
-    // Database connection issue
     if (result?.code === 'DB_CONNECTION_ERROR') {
       return res.error({
         message: 'Network Error! Database not connected'
       }, httpStatus.SERVICE_UNAVAILABLE);
     }
 
-    // Validation or custom service error
     if (result?.status === false) {
       return res.error({
-        message: result?.message || 'Failed to save client'
+        message: result?.message || 'Failed to save leave type'
       }, httpStatus.BAD_REQUEST);
     }
 
     return res.success({
       data: result,
-      message: result?.message || 'Client saved successfully'
+      message: result?.message || 'Leave type saved successfully'
     }, httpStatus.OK);
 
   } catch (error) {
-    console.log('AddEditClient Error =>', error);
+    console.log('AddEditLeaveType Error =>', error);
 
     return res.error({
       message: 'Internal Server Error'
@@ -45,19 +38,16 @@ async function AddEditClient(req, res) {
   }
 }
 
-async function getAllClients(req, res) {
+async function GetLeaveTypes(req, res) {
   try {
+    const result = await getLeaveTypes();
 
-    const result = await getClients();
-
-    // Database connection issue
     if (result?.code === 'DB_CONNECTION_ERROR') {
       return res.error({
         message: 'Network Error! Database not connected'
       }, httpStatus.SERVICE_UNAVAILABLE);
     }
 
-    // No data found
     if (!result || result.length === 0) {
       return res.success({
         data: [],
@@ -67,11 +57,11 @@ async function getAllClients(req, res) {
 
     return res.success({
       data: result,
-      message: 'Clients fetched successfully'
+      message: 'Leave types fetched successfully'
     }, httpStatus.OK);
 
   } catch (error) {
-    console.log('getAllClients Error =>', error);
+    console.log('GetLeaveTypes Error =>', error);
 
     return res.error({
       message: 'Internal Server Error'
@@ -80,6 +70,6 @@ async function getAllClients(req, res) {
 }
 
 module.exports = {
-  AddEditClient,
-  getAllClients
+  AddEditLeaveType,
+  GetLeaveTypes
 };

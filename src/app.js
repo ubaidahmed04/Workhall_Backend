@@ -11,7 +11,7 @@ const errorHandler = require('./middleware/errorHandler.middleware');
 const v1Routes = require('./routes');
 
 const app = express();
-
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.set('trust proxy', 1);
 
 app.use(helmet());

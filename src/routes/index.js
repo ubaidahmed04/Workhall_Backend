@@ -13,6 +13,11 @@ const skillsRoutes = require('./skills.routes.js');
 const holidayRoutes = require('./holiday.routes.js');
 const employeeRoutes = require('./employee.routes.js');
 const clientRoutes = require('./client.routes.js');
+const leaveTypeRoutes = require('./leaveType.routes.js');
+const userProfileRoutes = require('./user.routes.js');
+const leaveRoutes = require('./leave.routes.js');
+const employeeLeaveRoutes = require('./empLeave.routes.js');
+const branchRoutes = require('./branch.routes.js');
 
 const router = express.Router();
 
@@ -27,6 +32,11 @@ router.use('/skills', skillsRoutes);
 router.use('/holiday', holidayRoutes);
 router.use('/client', clientRoutes);
 router.use('/employee', employeeRoutes);
+router.use('/leavetype', leaveTypeRoutes);
+router.use('/user', userProfileRoutes);
+router.use('/leave', leaveRoutes);
+router.use('/employeeLeave', employeeLeaveRoutes);
+router.use('/branch', branchRoutes);
 // router.use('/', roleRoutes);
 
 module.exports = router;

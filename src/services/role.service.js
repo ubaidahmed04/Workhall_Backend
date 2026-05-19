@@ -11,13 +11,6 @@ async function addEditRole(payload, actor) {
         vstatus
     } = payload;
 
-    logger.info({
-        vroleid,
-        vrolename,
-        vstatus,
-        actor
-    });
-
     return withConnection(async (conn) => {
 
         const result = await conn.execute(
@@ -34,9 +27,7 @@ async function addEditRole(payload, actor) {
                 vroleid: vroleid || null,
                 vrolename,
                 vstatus,
-                // logged in user
                 vcreatedby: actor,
-                // OUT parameter
                 vmessage: {
                     dir: oracledb.BIND_OUT,
                     type: oracledb.STRING

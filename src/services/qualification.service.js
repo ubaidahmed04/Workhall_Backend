@@ -6,14 +6,9 @@ const logger = require('../config/logger');
 
 async function addEditQalify(payload, actor) {
 
-    const {
-        vqualificaid,
-        vqualificaname,
-        vstatus
-    } = payload;
+    const { vqualificaid, vqualificaname, vstatus } = payload;
 
     return withConnection(async (conn) => {
-
         const result = await conn.execute(
             `BEGIN
                 add_edit_qualification(
@@ -28,9 +23,7 @@ async function addEditQalify(payload, actor) {
                 vqualificaid: vqualificaid || null,
                 vqualificaname,
                 vstatus,
-                // logged in user
                 vcreatedby: actor,
-                // OUT parameter
                 vmessage: {
                     dir: oracledb.BIND_OUT,
                     type: oracledb.STRING

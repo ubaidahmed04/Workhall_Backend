@@ -6,18 +6,7 @@ const logger = require('../config/logger');
 
 async function addEditSkills(payload, actor) {
 
-    const {
-        vskillid,
-        vskillname,
-        vstatus
-    } = payload;
-
-    logger.info({
-        vskillid,
-        vskillname,
-        vstatus,
-        actor
-    });
+    const { vskillid, vskillname, vstatus } = payload;
 
     return withConnection(async (conn) => {
 
@@ -35,7 +24,6 @@ async function addEditSkills(payload, actor) {
                 vskillid: vskillid || null,
                 vskillname,
                 vstatus,
-                // logged in user
                 vcreatedby: actor,
                 // OUT parameter
                 vmessage: {

@@ -6,48 +6,21 @@ const logger = require('../config/logger');
 
 async function addEditHoliday(payload, actor) {
 
-    const {
-        vholidayid,
-        vfromdate,
-        vtodate,
-        vdescrip,
-        vstatus
-    } = payload;
-
-    logger.info({
-        vholidayid,
-        vfromdate,
-        vtodate,
-        vdescrip,
-        vstatus,
-        actor
-    });
+    const { vholidayid, vfromdate, vtodate, vdescrip, vstatus } = payload;
 
     return withConnection(async (conn) => {
 
         const result = await conn.execute(
             `BEGIN
-                add_edit_holiday(
-                    :vholidayid,
-                    :vfromdate,
-                    :vtodate,
-                    :vdescrip,
-                    :vstatus,
-                    :vcreatedby,
-                    :vmessage
-                );
-            END;`,
+                add_edit_holiday(:vholidayid, :vfromdate, :vtodate, :vdescrip, :vstatus, :vcreatedby, :vmessage );
+             END;`,
             {
                 vholidayid: vholidayid || null,
-
-                // Oracle DATE
                 vfromdate: new Date(vfromdate),
                 vtodate: new Date(vtodate),
                 vdescrip,
                 vstatus,
-                // logged in user
                 vcreatedby: actor,
-                // OUT parameter
                 vmessage: {
                     dir: oracledb.BIND_OUT,
                     type: oracledb.STRING

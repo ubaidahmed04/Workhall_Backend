@@ -2,11 +2,12 @@
 
 const express = require('express');
 const { optionalAuth } = require('../middleware/auth.middleware');
-const { addEditUserProfile } = require('../services/userprofile.service');
+const { addUserProfile , getAllUsers} = require('../controllers/userprofile.controller');
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth , addEditUserProfile);
+router.post('/add-edit', optionalAuth , addUserProfile);
+router.get('/get-all', optionalAuth , getAllUsers);
 
 
 module.exports = router;
