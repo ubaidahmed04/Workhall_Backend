@@ -1,81 +1,61 @@
 'use strict';
 
-const httpStatus = require('../constants/httpStatus');
 const { addClient, getClients } = require('../services/client.service');
 
 async function AddEditClient(req, res) {
   try {
-
     const actorId = req.user?.userid || 'SYSTEM';
-
     const result = await addClient(req.body, actorId);
 
-    // No response from service
-    if (!result) {
-      return res.error({
-        message: 'No Data Found'
-      }, httpStatus.NOT_FOUND);
-    }
-
-    // Database connection issue
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({
-        message: 'Network Error! Database not connected'
-      }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({ message: 'Database not connected' });
     }
 
-    // Validation or custom service error
     if (result?.status === false) {
-      return res.error({
+      return res.status(400).json({
         message: result?.message || 'Failed to save client'
-      }, httpStatus.BAD_REQUEST);
+      });
     }
 
-    return res.success({
+    if (result === null || result === undefined) {
+      return res.status(404).json({ message: 'No Data Found' });
+    }
+
+    return res.status(200).json({
       data: result,
       message: result?.message || 'Client saved successfully'
-    }, httpStatus.OK);
+    });
 
   } catch (error) {
     console.log('AddEditClient Error =>', error);
 
-    return res.error({
+    return res.status(500).json({
       message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    });
   }
 }
 
 async function getAllClients(req, res) {
   try {
-
     const result = await getClients();
 
-    // Database connection issue
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({
-        message: 'Network Error! Database not connected'
-      }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({
+        message: 'Database not connected'
+      });
     }
 
-    // No data found
-    if (!result || result.length === 0) {
-      return res.success({
-        data: [],
-        message: 'No Data Found'
-      }, httpStatus.OK);
-    }
-
-    return res.success({
-      data: result,
-      message: 'Clients fetched successfully'
-    }, httpStatus.OK);
+    return res.status(200).json({
+      data: result || [],
+      message: result?.length ? 'Clients fetched successfully' : 'No Data Found'
+    });
 
   } catch (error) {
     console.log('getAllClients Error =>', error);
 
-    return res.error({
+    return res.status(500).json({
       message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    });
   }
 }
 

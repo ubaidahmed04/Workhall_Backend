@@ -7,8 +7,8 @@ const { AddEditSkill, getAllSkills } = require('../controllers/skills.controller
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth , AddEditSkill);
-router.get('/get-all', optionalAuth , getAllSkills);
+router.post('/add-edit', authenticate, authorize([1, 2, 3]), AddEditSkill);
+router.get('/get-all',   authenticate, getAllSkills);
 
 
 

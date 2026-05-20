@@ -2,9 +2,11 @@
 
 const router = require("express").Router();
 const { AddEditLeaveType,GetLeaveTypes } = require("../controllers/leavetype.controller");
+const { authenticate } = require("../middleware/auth.middleware");
+const authorize = require("../middleware/authorize.middleware");
 
-router.post("/add-edit",AddEditLeaveType);
+router.post("/add-edit", authenticate, authorize([1, 2, 3]), AddEditLeaveType);
 
-router.get("/get-all",GetLeaveTypes);
+router.get("/get-all", authenticate, GetLeaveTypes);
 
 module.exports = router;

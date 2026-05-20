@@ -7,8 +7,8 @@ const { AddEditHoliday , getAllHoliday} = require('../controllers/holiday.contro
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth , AddEditHoliday);
-router.get('/get-all', optionalAuth , getAllHoliday);
+router.post('/add-edit', authenticate, authorize([1, 2, 3]), AddEditHoliday);
+router.get('/get-all',   authenticate, getAllHoliday);
 
 
 

@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const { env } = require('../config/env');
 
 function signAccessToken(payload) {
-  return jwt.sign(payload, env.JWT_ACCESS_SECRET, {
-    expiresIn: env.JWT_ACCESS_EXPIRES_IN,
+  return jwt.sign(payload, env.JWT_SECRET, {
+    expiresIn: env.JWT_EXPIRES_IN,
     issuer: 'nutrackx',
     audience: 'nutrackx-api',
   });
@@ -20,7 +20,7 @@ function signRefreshToken(payload) {
 }
 
 function verifyAccessToken(token) {
-  return jwt.verify(token, env.JWT_ACCESS_SECRET, {
+  return jwt.verify(token, env.JWT_SECRET, {
     issuer: 'nutrackx',
     audience: 'nutrackx-api',
   });

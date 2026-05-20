@@ -7,9 +7,9 @@ const schema = Joi.object({
   PORT: Joi.number().integer().default(3000),
   API_VERSION: Joi.string().default('v1'),
 
-  JWT_ACCESS_SECRET: Joi.string().min(32).required(),
+  JWT_SECRET: Joi.string().min(32).required(),
   JWT_REFRESH_SECRET: Joi.string().min(32).required(),
-  JWT_ACCESS_EXPIRES_IN: Joi.string().default('8h'),
+  JWT_EXPIRES_IN: Joi.string().default('8h'),
   JWT_REFRESH_EXPIRES_IN: Joi.string().default('7d'),
 
   DB_USER: Joi.string().required(),

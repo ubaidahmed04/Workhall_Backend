@@ -8,8 +8,8 @@ const upload = require('../middleware/upload');
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth,  upload.single("vimage") , AddEditEmployee);
-router.get('/get-all',   optionalAuth,  getAllEmployee);
+router.post('/add-edit', authenticate, authorize([1, 2, 3]),  upload.single("vimage") , AddEditEmployee);
+router.get('/get-all',   authenticate,  getAllEmployee);
 
 
 

@@ -7,8 +7,8 @@ const {  AddEditQualification , getAllQualification} = require('../controllers/q
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth , AddEditQualification);
-router.get('/get-all', optionalAuth , getAllQualification);
+router.post('/add-edit', authenticate, authorize([1, 2, 3]), AddEditQualification);
+router.get('/get-all',   authenticate, getAllQualification);
 
 
 

@@ -18,6 +18,7 @@ const userProfileRoutes = require('./user.routes.js');
 const leaveRoutes = require('./leave.routes.js');
 const employeeLeaveRoutes = require('./empLeave.routes.js');
 const branchRoutes = require('./branch.routes.js');
+const attendenceRoutes = require('./attendence.routes.js');
 
 const router = express.Router();
 
@@ -37,6 +38,7 @@ router.use('/user', userProfileRoutes);
 router.use('/leave', leaveRoutes);
 router.use('/employeeLeave', employeeLeaveRoutes);
 router.use('/branch', branchRoutes);
+router.use('/attendance', attendenceRoutes);
 // router.use('/', roleRoutes);
 
 module.exports = router;

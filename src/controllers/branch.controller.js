@@ -6,75 +6,51 @@ const { addBranch, getBranches } = require('../services/branch.service');
 async function AddEditBranch(req, res) {
   try {
     const actorId = req.user?.userid || 'SYSTEM';
-
     const result = await addBranch(req.body, actorId);
 
-    // No response from service
-    if (!result) {
-      return res.error({
-        message: 'No Data Found'
-      }, httpStatus.NOT_FOUND);
-    }
-
-    // Database / connection issue handling
+    // ✅ DB error — sabse pehle check karo
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({
-        message: 'Network Error! Database not connected'
-      }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({ message: 'Database not connected' });
     }
 
-    // Validation or custom service error
+    // ✅ Service-level validation error
     if (result?.status === false) {
-      return res.error({
-        message: result?.message || 'Failed to save branch'
-      }, httpStatus.BAD_REQUEST);
+      return res.status(400).json({ message: result?.message || 'Failed to save branch' });
     }
 
-    return res.success({
+    // ✅ Null/undefined check
+    if (result === null || result === undefined) {
+      return res.status(404).json({ message: 'No Data Found' });
+    }
+
+    return res.status(200).json({
       data: result,
       message: result?.message || 'Branch saved successfully'
-    }, httpStatus.OK);
+    });
 
   } catch (error) {
-    console.log('AddEditBranch Error =>', error);
-
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    console.error('AddEditBranch Error =>', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 
 async function getAllBranch(req, res) {
   try {
-
     const result = await getBranches();
 
-    // Database connection issue
+    //  DB error pehle
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({
-        message: 'Network Error! Database not connected'
-      }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({ message: 'Database not connected' });
     }
 
-    // No data found
-    if (!result || result.length === 0) {
-      return res.success({
-        data: [],
-        message: 'No Data Found'
-      }, httpStatus.OK);
-    }
-
-    return res.success({
-      data: result,
-      message: 'Branches fetched successfully'
-    }, httpStatus.OK);
+    return res.status(200).json({
+      data: result || [],
+      message: result?.length ? 'Branches fetched successfully' : 'No Data Found'
+    });
 
   } catch (error) {
-    console.log('getAllBranch Error =>', error);
-
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    console.error('getAllBranch Error =>', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 

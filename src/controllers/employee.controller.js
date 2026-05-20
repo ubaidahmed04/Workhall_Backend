@@ -1,6 +1,5 @@
 'use strict';
 
-const httpStatus = require('../constants/httpStatus');
 const { addEditEmp, getEmployees } = require('../services/employee.service');
 const path = require('path');
 const fs = require('fs');
@@ -32,35 +31,31 @@ async function AddEditEmployee(req, res) {
 
     if (!result) {
       if (req.file) removeFile(req.file.filename);
-      return res.error({ message: 'No Data Found' }, httpStatus.NOT_FOUND);
+      return res.status(404).json({ message: 'No Data Found' });
     }
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
       if (req.file) removeFile(req.file.filename);
-      return res.error({ message: 'Network Error! Database not connected' }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({ message: 'Database not connected' });
     }
 
-    if (result?.status === false || result?.message?.toLowerCase().includes('error')) {
+    if (result?.status === false) {
       if (req.file) removeFile(req.file.filename);
-
-      return res.error({
+      return res.status(400).json({
         message: result?.message || 'Failed to save employee'
-      }, httpStatus.BAD_REQUEST);
+      });
     }
 
-    return res.success({
+    return res.status(200).json({
       data: result,
       message: result?.message || 'Employee saved successfully'
-    }, httpStatus.OK);
+    });
 
   } catch (error) {
     if (req.file) removeFile(req.file.filename);
-
     console.log('AddEditEmployee Error =>', error);
 
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 
@@ -72,27 +67,24 @@ async function getAllEmployee(req, res) {
     const result = await getEmployees(voffset, vlimit);
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({ message: 'Network Error! Database not connected' }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({ message: 'Database not connected' });
     }
 
     if (!result || result.length === 0) {
-      return res.success({
+      return res.status(200).json({
         data: [],
         message: 'No Data Found'
-      }, httpStatus.OK);
+      });
     }
 
-    return res.success({
+    return res.status(200).json({
       data: result,
       message: 'Employees fetched successfully'
-    }, httpStatus.OK);
+    });
 
   } catch (error) {
     console.log('getAllEmployee Error =>', error);
-
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 

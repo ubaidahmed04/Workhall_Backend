@@ -1,6 +1,5 @@
 'use strict';
 
-const httpStatus = require('../constants/httpStatus');
 const { addEditQalify, getQualification } = require('../services/qualification.service');
 
 async function AddEditQualification(req, res) {
@@ -8,33 +7,26 @@ async function AddEditQualification(req, res) {
     const actorId = req.user?.userid || 'SYSTEM';
     const result = await addEditQalify(req.body, actorId);
 
-    if (!result) {
-      return res.error({ message: 'No Data Found' }, httpStatus.NOT_FOUND);
-    }
+    if (!result) return res.status(404).json({ message: 'No Data Found' });
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({
-        message: 'Network Error! Database not connected'
-      }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({ message: 'Database not connected' });
     }
 
     if (result?.status === false) {
-      return res.error({
+      return res.status(400).json({
         message: result?.message || 'Failed to save qualification'
-      }, httpStatus.BAD_REQUEST);
+      });
     }
 
-    return res.success({
+    return res.status(200).json({
       data: result,
       message: result?.message || 'Qualification saved successfully'
-    }, httpStatus.OK);
+    });
 
   } catch (error) {
     console.log('AddEditQualification Error =>', error);
-
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 
@@ -43,29 +35,17 @@ async function getAllQualification(req, res) {
     const result = await getQualification();
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({
-        message: 'Network Error! Database not connected'
-      }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({ message: 'Database not connected' });
     }
 
-    if (!result || result.length === 0) {
-      return res.success({
-        data: [],
-        message: 'No Data Found'
-      }, httpStatus.OK);
-    }
-
-    return res.success({
-      data: result,
-      message: 'Qualification fetched successfully'
-    }, httpStatus.OK);
+    return res.status(200).json({
+      data: result || [],
+      message: result?.length ? 'Qualification fetched successfully' : 'No Data Found'
+    });
 
   } catch (error) {
     console.log('getAllQualification Error =>', error);
-
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 

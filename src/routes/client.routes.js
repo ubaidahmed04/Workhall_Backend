@@ -7,8 +7,8 @@ const { AddEditClient, getAllClients } = require('../controllers/client.controll
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth , AddEditClient);
-router.get('/get-all', optionalAuth , getAllClients);
+router.post('/add-edit', authenticate,authorize([1, 2, 3]), AddEditClient);
+router.get('/get-all', authenticate , getAllClients);
 
 
 

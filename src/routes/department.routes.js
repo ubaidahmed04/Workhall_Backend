@@ -7,8 +7,8 @@ const { addEditDepart ,getAllDepartment } = require('../controllers/department.c
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth , addEditDepart);
-router.get('/get-all', optionalAuth , getAllDepartment);
+router.post('/add-edit', authenticate, authorize([1, 2, 3]), addEditDepart);
+router.get('/get-all', authenticate, getAllDepartment);
 
 
 

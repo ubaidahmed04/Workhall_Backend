@@ -7,8 +7,8 @@ const { AddEditBranch, getAllBranch } = require('../controllers/branch.controlle
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth , AddEditBranch);
-router.get('/get-all', optionalAuth , getAllBranch);
+router.post('/add-edit',  authenticate,authorize([1, 2, 3]), AddEditBranch);
+router.get('/get-all', authenticate , getAllBranch);
 
 
 

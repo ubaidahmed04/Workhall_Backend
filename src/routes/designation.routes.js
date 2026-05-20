@@ -7,8 +7,8 @@ const { addEditDesignation,getAllDesignation } = require('../controllers/designa
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth , addEditDesignation);
-router.get('/get-all', optionalAuth , getAllDesignation);
+router.post('/add-edit', authenticate, authorize([1, 2, 3]) , addEditDesignation);
+router.get('/get-all',   authenticate, getAllDesignation);
 
 
 

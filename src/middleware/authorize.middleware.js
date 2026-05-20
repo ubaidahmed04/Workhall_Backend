@@ -1,19 +1,18 @@
 function authorize(allowedRoles = []) {
   return (req, res, next) => {
 
-    const role = req.user?.role;
+    const role = req.user?.roleid;
 
     if (!role) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    // Super Admin bypass
-    if (role === 'SUPER_ADMIN') {
+    if (role === 1) { //  SUPER_ADMIN roleid assume
       return next();
     }
 
     if (!allowedRoles.includes(role)) {
-      return res.status(403).json({ message: 'Forbidden' });
+      return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
     }
 
     next();

@@ -2,29 +2,19 @@
 
 const jwt = require('../utils/jwt.util');
 const ApiError = require('../utils/ApiError');
-
+const JWT_SECRET = process.env.JWT_SECRET;
 function authenticate(req, res, next) {
+  const token = req.cookies?.accessToken;
+  if (!token) {
+    return res.status(401).json({ message: "Token required" });
+  }
+  console.log("<><><><><><----------token ----<><><<><><><",token)
   try {
-    const header = req.headers.authorization;
-
-    if (!header) {
-      throw new ApiError(401, 'Token required');
-    }
-
-    const token = header.split(' ')[1];
-
-    if (!token) {
-      throw new ApiError(401, 'Invalid token format');
-    }
-
-    const user = jwt.verifyAccessToken(token);
-
-    req.user = user;
-
+    const decoded = jwt.verifyAccessToken(token);
+    req.user = decoded;
     next();
-
   } catch (err) {
-    next(new ApiError(401, 'Unauthorized'));
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 }
 function optionalAuth(req, res, next) {

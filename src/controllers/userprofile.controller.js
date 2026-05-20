@@ -17,9 +17,7 @@ async function addUserProfile(req, res) {
     }
 
     if (result?.status === false) {
-      return res.error({
-        message: result?.message || 'Failed to save user profile'
-      }, httpStatus.BAD_REQUEST);
+      return res.error({ message: result?.message || 'Failed to save user profile' }, httpStatus.BAD_REQUEST);
     }
 
     return res.success({
@@ -29,10 +27,7 @@ async function addUserProfile(req, res) {
 
   } catch (error) {
     console.log('addUserProfile Error =>', error);
-
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    return res.error({ message: 'Internal Server Error' }, httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -41,16 +36,11 @@ async function getAllUsers(req, res) {
     const result = await getUsersProfile();
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({
-        message: 'Network Error! Database not connected'
-      }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.error({ message: 'Network Error! Database not connected' }, httpStatus.SERVICE_UNAVAILABLE);
     }
 
     if (!result || result.length === 0) {
-      return res.success({
-        data: [],
-        message: 'No Data Found'
-      }, httpStatus.OK);
+      return res.success({ data: [], message: 'No Data Found' }, httpStatus.OK);
     }
 
     return res.success({
@@ -60,10 +50,7 @@ async function getAllUsers(req, res) {
 
   } catch (error) {
     console.log('getAllUsers Error =>', error);
-
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    return res.error({ message: 'Internal Server Error' }, httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 

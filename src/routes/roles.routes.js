@@ -7,8 +7,8 @@ const { AddEditRole, getAllRoles } = require('../controllers/role.controller');
 
 const router = express.Router();
 
-router.post('/add-edit', optionalAuth , AddEditRole);
-router.get('/get-all', optionalAuth , getAllRoles);
+router.post('/add-edit', authenticate, authorize([1, 2, 3]), AddEditRole);
+router.get('/get-all',   authenticate, getAllRoles);
 
 
 

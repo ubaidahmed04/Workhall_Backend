@@ -1,6 +1,5 @@
 'use strict';
 
-const httpStatus = require('../constants/httpStatus');
 const { addEditLeaveType, getLeaveTypes } = require('../services/leavetype.service');
 
 async function AddEditLeaveType(req, res) {
@@ -8,33 +7,26 @@ async function AddEditLeaveType(req, res) {
     const actorId = req.user?.userid || 'SYSTEM';
     const result = await addEditLeaveType(req.body, actorId);
 
-    if (!result) {
-      return res.error({ message: 'No Data Found' }, httpStatus.NOT_FOUND);
-    }
+    if (!result) return res.status(404).json({ message: 'No Data Found' });
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({
-        message: 'Network Error! Database not connected'
-      }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({ message: 'Database not connected' });
     }
 
     if (result?.status === false) {
-      return res.error({
+      return res.status(400).json({
         message: result?.message || 'Failed to save leave type'
-      }, httpStatus.BAD_REQUEST);
+      });
     }
 
-    return res.success({
+    return res.status(200).json({
       data: result,
       message: result?.message || 'Leave type saved successfully'
-    }, httpStatus.OK);
+    });
 
   } catch (error) {
     console.log('AddEditLeaveType Error =>', error);
-
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 
@@ -43,29 +35,17 @@ async function GetLeaveTypes(req, res) {
     const result = await getLeaveTypes();
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.error({
-        message: 'Network Error! Database not connected'
-      }, httpStatus.SERVICE_UNAVAILABLE);
+      return res.status(503).json({ message: 'Database not connected' });
     }
 
-    if (!result || result.length === 0) {
-      return res.success({
-        data: [],
-        message: 'No Data Found'
-      }, httpStatus.OK);
-    }
-
-    return res.success({
-      data: result,
-      message: 'Leave types fetched successfully'
-    }, httpStatus.OK);
+    return res.status(200).json({
+      data: result || [],
+      message: result?.length ? 'Leave types fetched successfully' : 'No Data Found'
+    });
 
   } catch (error) {
     console.log('GetLeaveTypes Error =>', error);
-
-    return res.error({
-      message: 'Internal Server Error'
-    }, httpStatus.INTERNAL_SERVER_ERROR);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
 
