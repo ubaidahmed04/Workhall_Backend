@@ -54,7 +54,7 @@ async function loginWeb(username, password) {
     }
 
     const passwordMatch = await bcrypt.compare(password, vpassword_o);
-
+    console.log("passwordMatch",passwordMatch)
     if (!passwordMatch) {
       throw { status: 401, message: "Invalid username or password" };
     }

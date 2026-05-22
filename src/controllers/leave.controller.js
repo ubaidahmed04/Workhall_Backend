@@ -4,7 +4,7 @@ const { addEditLeave, getLeaves } = require('../services/leave.service');
 
 async function AddEditLeave(req, res) {
   try {
-    const actorId = req.user?.userid || 'SYSTEM';
+    const actorId = req.user?.username || 'SYSTEM';
     const result = await addEditLeave(req.body, actorId);
 
     if (!result) return res.status(404).json({ message: 'No Data Found' });

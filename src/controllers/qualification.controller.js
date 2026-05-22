@@ -4,7 +4,7 @@ const { addEditQalify, getQualification } = require('../services/qualification.s
 
 async function AddEditQualification(req, res) {
   try {
-    const actorId = req.user?.userid || 'SYSTEM';
+    const actorId = req.user?.username || 'SYSTEM';
     const result = await addEditQalify(req.body, actorId);
 
     if (!result) return res.status(404).json({ message: 'No Data Found' });

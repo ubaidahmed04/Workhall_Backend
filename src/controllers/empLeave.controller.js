@@ -4,7 +4,7 @@ const { addEditEmpLeave, getEmpLeaves } = require('../services/empLeave.service'
 
 async function AddEditEmpLeave(req, res) {
   try {
-    const actorId = req.user?.userid || 'SYSTEM';
+    const actorId = req.user?.username || 'SYSTEM';
     const result = await addEditEmpLeave(req.body, actorId);
 
     if (result?.code === 'DB_CONNECTION_ERROR') {

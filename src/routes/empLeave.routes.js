@@ -5,8 +5,8 @@ const { AddEditEmpLeave,GetEmpLeaves } = require("../controllers/empLeave.contro
 const { authenticate } = require("../middleware/auth.middleware");
 const authorize = require("../middleware/authorize.middleware");
 
-router.post("/add-edit", authenticate, authorize([1, 2, 3]),AddEditEmpLeave);
+router.post("/add-edit", authenticate,  authorize([1, 2, 3]), AddEditEmpLeave);
 
-router.get("/get-all", authenticate, GetEmpLeaves);
+router.get("/get-all",   authenticate, GetEmpLeaves);
 
 module.exports = router;

@@ -4,7 +4,7 @@ const { addEditDesig, getDesignation } = require('../services/designation.servic
 
 async function addEditDesignation(req, res) {
   try {
-    const actorId = req.user?.userid || 'SYSTEM';
+    const actorId = req.user?.username || 'SYSTEM';
     const result = await addEditDesig(req.body, actorId);
 
     if (result?.code === 'DB_CONNECTION_ERROR') {

@@ -21,7 +21,7 @@ function removeFile(filename) {
 
 async function AddEditEmployee(req, res) {
   try {
-    const actorId = req.user?.userid || 'SYSTEM';
+    const actorId = req.user?.username || 'SYSTEM';
 
     if (req.file) {
       req.body.imageUrl = buildImageUrl(req.file.filename);
@@ -47,6 +47,7 @@ async function AddEditEmployee(req, res) {
     }
 
     return res.status(200).json({
+      success: true,
       data: result,
       message: result?.message || 'Employee saved successfully'
     });
@@ -78,6 +79,7 @@ async function getAllEmployee(req, res) {
     }
 
     return res.status(200).json({
+      success: true,
       data: result,
       message: 'Employees fetched successfully'
     });

@@ -5,7 +5,7 @@ const { addEditSkills, getSkills } = require('../services/skills.service');
 
 async function AddEditSkill(req, res) {
   try {
-    const actorId = req.user?.userid || 'SYSTEM';
+    const actorId = req.user?.username || 'SYSTEM';
     const result = await addEditSkills(req.body, actorId);
 
     if (!result) {

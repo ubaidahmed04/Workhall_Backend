@@ -4,7 +4,7 @@ const { addEditLeaveType, getLeaveTypes } = require('../services/leavetype.servi
 
 async function AddEditLeaveType(req, res) {
   try {
-    const actorId = req.user?.userid || 'SYSTEM';
+    const actorId = req.user?.username || 'SYSTEM';
     const result = await addEditLeaveType(req.body, actorId);
 
     if (!result) return res.status(404).json({ message: 'No Data Found' });

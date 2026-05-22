@@ -4,7 +4,7 @@ const { addEditHoliday, getHoliday } = require('../services/holiday.service');
 
 async function AddEditHoliday(req, res) {
   try {
-    const actorId = req.user?.userid || 'SYSTEM';
+    const actorId = req.user?.username || 'SYSTEM';
     const result = await addEditHoliday(req.body, actorId);
 
     if (!result) return res.status(404).json({ message: 'No Data Found' });

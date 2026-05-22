@@ -5,7 +5,7 @@ const { signAccessToken } = require("../utils/jwt.util.js");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "8h";
-console.log("JWT_SECRET:", JWT_SECRET);
+// console.log("JWT_SECRET:", JWT_SECRET);
 async function loginController(req, res) {
   try {
     const { username, password } = req.body;

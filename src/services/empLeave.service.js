@@ -16,6 +16,7 @@ async function addEditEmpLeave(body, actorId) {
     vfromdate,
     vtodate,
     vdescrip,
+    vfk_approvalid,
     vstatus
   } = body;
 
@@ -31,6 +32,7 @@ async function addEditEmpLeave(body, actorId) {
           :vfromdate,
           :vtodate,
           :vdescrip,
+          :vfk_approvalid,
           :vstatus,
           :vcreatedby,
           :vmessage
@@ -44,6 +46,7 @@ async function addEditEmpLeave(body, actorId) {
         vfromdate: vfromdate ? new Date(vfromdate) : null,
         vtodate: vtodate ? new Date(vtodate) : null,
         vdescrip: vdescrip || null,
+        vfk_approvalid: toNumberOrNull(vfk_approvalid),
         vstatus:  vstatus !== undefined ? Number(vstatus) : 0,
         vcreatedby: actorId,
         vmessage: {
@@ -82,6 +85,7 @@ async function getEmpLeaves() {
     return rows?.map((row) => ({
       empleaveid: row.EMPLEAVEID,
       fk_empid: row.FK_EMPID,
+      fullname: `${row.FIRSTNAME || ""} ${row.LASTNAME || ""}`.trim(),
       firstname: row.FIRSTNAME,
       lastname: row.LASTNAME,
       fk_leavetypeid: row.FK_LEAVETYPEID,
@@ -89,7 +93,9 @@ async function getEmpLeaves() {
       fromdate: row.FROMDATE,
       todate: row.TODATE,
       description: row.DESCRIPTION,
-      status: row.STATUS
+      status: row.STATUS,
+      fk_approvalid: row.FK_APPROVALID,
+      approvalstatusname: row.APPROVALSTATUSNAME,
     }));
   });
 }

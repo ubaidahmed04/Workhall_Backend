@@ -8,7 +8,6 @@ function authenticate(req, res, next) {
   if (!token) {
     return res.status(401).json({ message: "Token required" });
   }
-  console.log("<><><><><><----------token ----<><><<><><><",token)
   try {
     const decoded = jwt.verifyAccessToken(token);
     req.user = decoded;
