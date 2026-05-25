@@ -89,7 +89,7 @@ async function getUsersProfile() {
             }
         );
         const resultSet = result.outBinds.retval;
-        const rows = await resultSet.getRows(); // all rows
+        const rows = await resultSet.getRows(500); // all rows
         await resultSet.close();
         return rows.map(row => ({
             userid: row.USERID,

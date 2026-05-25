@@ -54,8 +54,6 @@ async function AddEditEmployee(req, res) {
 
   } catch (error) {
     if (req.file) removeFile(req.file.filename);
-    console.log('AddEditEmployee Error =>', error);
-
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }

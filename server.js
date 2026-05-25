@@ -29,7 +29,7 @@ async function main() {
     server.listen(env.PORT, ()=>{
          logger.info(`NutrackX API listening on port ${env.PORT} (${env.NODE_ENV})`);
     })
-    server.on('error', ()=>{
+    server.on('error', (err)=>{
         logger.error('HTTP server error', err);
         process.exit(1);
     })

@@ -173,7 +173,7 @@ async function getEmployees(voffset = 0, vlimit = 10) {
     );
 
     const resultSet = result.outBinds.retval;
-    const rows = await resultSet.getRows();
+    const rows = await resultSet.getRows(500);
     await resultSet.close();
 
     logger.debug(`Fetched ${rows.length} employees`);

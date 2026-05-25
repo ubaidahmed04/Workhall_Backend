@@ -101,7 +101,7 @@ async function fetchAllAttendance() {
 }
 
 async function fetchAttendanceByDate(fromdate, todate) {
-  const connection = await oracledb.getConnection();
+  return withConnection(async (connection) => { 
 
   const result = await connection.execute(
     `BEGIN
@@ -121,7 +121,7 @@ async function fetchAttendanceByDate(fromdate, todate) {
     }
   );
 
-  const rows = await result.outBinds.retval.getRows();
+  const rows = await result.outBinds.retval.getRows(1000);
 
   await result.outBinds.retval.close();
   await connection.close();
@@ -147,6 +147,7 @@ async function fetchAttendanceByDate(fromdate, todate) {
     remote_reason: r.REMOTE_REASON,
 
   }));
+  });
 }
 
 async function getDeptAttSummary() {

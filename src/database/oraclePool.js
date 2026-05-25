@@ -26,8 +26,8 @@ async function initPool() {
       poolMin: env.ORACLE_POOL_MIN,
       poolMax: env.ORACLE_POOL_MAX,
       poolIncrement: env.ORACLE_POOL_INCREMENT,
-    //   stmtCacheSize: env.ORACLE_STMT_CACHE_SIZE,
-    //   queueTimeout: env.ORACLE_QUEUE_TIMEOUT,
+      // stmtCacheSize: env.ORACLE_STMT_CACHE_SIZE,
+      // queueTimeout: env.ORACLE_QUEUE_TIMEOUT,
     //   poolTimeout: env.ORACLE_POOL_TIMEOUT,
     //   enableStatistics: env.NODE_ENV !== 'production',
     });

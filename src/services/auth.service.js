@@ -21,12 +21,12 @@ async function loginWeb(username, password) {
         );
       END;`,
       {
-        vusername: username,
-        vpassword: "",
+        vusername: { dir: oracledb.BIND_IN,  type: oracledb.STRING, val: username },
+        vpassword: { dir: oracledb.BIND_IN,  type: oracledb.STRING, val: password },
         vuserid: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
         vempid: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
         vusername_o: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
-        vpassword_o: { dir: oracledb.BIND_OUT, type: oracledb.STRING }, // ✅ FIX HERE
+        vpassword_o: { dir: oracledb.BIND_OUT, type: oracledb.STRING }, // 
         vroleid: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
         vrolename: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
         vmessage: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
@@ -54,7 +54,6 @@ async function loginWeb(username, password) {
     }
 
     const passwordMatch = await bcrypt.compare(password, vpassword_o);
-    console.log("passwordMatch",passwordMatch)
     if (!passwordMatch) {
       throw { status: 401, message: "Invalid username or password" };
     }
