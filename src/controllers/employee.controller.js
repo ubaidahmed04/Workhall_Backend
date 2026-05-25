@@ -1,6 +1,6 @@
 'use strict';
 
-const { addEditEmp, getEmployees } = require('../services/employee.service');
+const { addEditEmp, getEmployees, deleteEmployee } = require('../services/employee.service');
 const path = require('path');
 const fs = require('fs');
 
@@ -90,7 +90,32 @@ async function getAllEmployee(req, res) {
   }
 }
 
+async function DeleteEmployee(req, res) {
+  try {
+
+    const { id } = req.params;
+
+    const result = await deleteEmployee(
+      id,
+      req.user?.username || "System"
+    );
+
+    return res.status(200).json({
+      message: result.message,
+    });
+
+  } catch (error) {
+
+    console.log("DeleteEmployee Error =>", error);
+
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+}
+
 module.exports = {
   AddEditEmployee,
-  getAllEmployee
+  getAllEmployee,
+  DeleteEmployee
 };

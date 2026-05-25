@@ -210,10 +210,50 @@ async function getEmployees(voffset = 0, vlimit = 10) {
 }
 
 
+async function deleteEmployee(empid, username) {
+  return withConnection(async (conn) => {
+
+    const result = await conn.execute(
+      `BEGIN
+          delete_employee(
+            :vempid,
+            :vcreatedby,
+            :vmessage
+          );
+       END;`,
+      {
+        vempid: {
+          val: Number(empid),
+          type: oracledb.NUMBER,
+        },
+
+        vcreatedby: {
+          val: username,
+          type: oracledb.STRING,
+        },
+
+        vmessage: {
+          dir: oracledb.BIND_OUT,
+          type: oracledb.STRING,
+          maxSize: 500,
+        },
+      },
+      {
+        autoCommit: true,
+      }
+    );
+
+    return {
+      status: true,
+      message: result.outBinds.vmessage,
+    };
+  });
+}
 
 
 
 
 
 
-module.exports = { getEmployees, addEditEmp };
+
+module.exports = { getEmployees, addEditEmp, deleteEmployee };

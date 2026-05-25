@@ -47,17 +47,21 @@ async function getAllAttendance(req, res) {
 
 async function getAttendanceByDate(req, res) {
   try {
-    const { date, empid } = req.query;
+    const { fromdate, todate } = req.query;
 
-    if (!date) return res.status(400).json({ message: 'Date is required' });
+    if (!fromdate || !todate) {
+      return res.status(400).json({
+        message: 'From Date and To Date are required',
+      });
+    }
 
-    const result = await fetchAttendanceByDate(date, empid);
+    const result = await fetchAttendanceByDate( fromdate, todate );
 
     if (result?.code === 'DB_CONNECTION_ERROR')
       return res.status(503).json({ message: 'Network Error! Database not connected' });
 
     return res.status(200).json({
-      data: result || null,
+      data: result || [],
       message: result ? 'Attendance found' : 'No attendance found for this date',
     });
 
