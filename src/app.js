@@ -18,11 +18,25 @@ app.set('trust proxy', 1);
 
 app.use(helmet());
 app.use(cookieParser());
-app.use(cors({ origin: true, credentials: true }));
-// app.use(cors({
-//   origin: "https://your-frontend-domain.com",
-//   credentials: true
-// }));
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin && process.env.NODE_ENV !== "production") {
+        return callback(null, true);
+      }
+      if (ALLOWED_ORIGINS.includes(origin)) {
+        return callback(null, true);
+      }
+      callback(new Error(`CORS: Origin not allowed — ${origin}`));
+    },
+    credentials: true,
+  })
+);
 app.use(
   morgan('combined', {
     stream: {

@@ -1,11 +1,20 @@
-const jwt = require("jsonwebtoken");
+// controllers/auth.controller.js
+
 const logger = require("../config/logger.js");
 const { loginWeb } = require("../services/auth.service.js");
 const { signAccessToken } = require("../utils/jwt.util.js");
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "8h";
-// console.log("JWT_SECRET:", JWT_SECRET);
+const isProduction = process.env.NODE_ENV === "production";
+
+// Cookie config — cross-origin ke liye SameSite=None + Secure=true zaroori hai
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: isProduction,               // production mein HTTPS only
+  sameSite: isProduction ? "none" : "lax", // cross-origin ke liye "none"
+  maxAge: 8 * 60 * 60 * 1000,        // 8 hours in ms
+  path: "/",
+};
+
 async function loginController(req, res) {
   try {
     const { username, password } = req.body;
@@ -23,13 +32,10 @@ async function loginController(req, res) {
       roleid: user.roleid,
     };
 
-     const token = signAccessToken(tokenPayload);
-     res.cookie("accessToken", token, {
-      httpOnly: true,       // JS se access nahi hoga (XSS safe)
-      secure: process.env.NODE_ENV === "production", // HTTPS only in prod
-      sameSite: "strict",   // CSRF protection
-      maxAge: 8 * 60 * 60 * 1000, // 8 hours in ms
-    });
+    const token = signAccessToken(tokenPayload);
+
+    res.cookie("accessToken", token, COOKIE_OPTIONS);
+
     return res.status(200).json({
       message: "Login successful",
       user: {
@@ -40,29 +46,17 @@ async function loginController(req, res) {
         rolename: user.rolename,
       },
     });
-
   } catch (err) {
     logger.error({ event: "login_failed", error: err.message });
-
     const status = err.status || 500;
     const message = err.message || "Internal server error";
-
     return res.status(status).json({ message });
   }
 }
+
 function logout(req, res) {
-  res.clearCookie("accessToken", {  // "token" nahi, "accessToken"
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  });
-
-  return res.status(200).json({
-    message: "Logged out successfully"
-  });
+  res.clearCookie("accessToken", COOKIE_OPTIONS);
+  return res.status(200).json({ message: "Logged out successfully" });
 }
-module.exports = {
-  loginController,
-  logout
 
-};
+module.exports = { loginController, logout };
