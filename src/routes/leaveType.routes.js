@@ -1,7 +1,7 @@
 // routes/leavetype.routes.js
 
 const router = require("express").Router();
-const { AddEditLeaveType,GetLeaveTypes } = require("../controllers/leavetype.controller");
+const { AddEditLeaveType,GetLeaveTypes } = require("../controllers/leaveType.controller");
 const { authenticate } = require("../middleware/auth.middleware");
 const authorize = require("../middleware/authorize.middleware");
 
