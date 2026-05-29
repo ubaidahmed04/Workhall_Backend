@@ -3,6 +3,7 @@
 const { addEditEmp, getEmployees, deleteEmployee } = require('../services/employee.service');
 const path = require('path');
 const fs = require('fs');
+const logger = require('../config/logger');
 
 function buildImageUrl(filename) {
   if (!filename) return null;
@@ -15,7 +16,7 @@ function removeFile(filename) {
   const filePath = path.join(process.cwd(), 'uploads', filename);
 
   fs.unlink(filePath, (err) => {
-    if (err) console.log(`File delete error: ${err.message}`);
+    if (err)logger.error(`File delete error: ${err.message}`);
   });
 }
 
@@ -31,30 +32,24 @@ async function AddEditEmployee(req, res) {
 
     if (!result) {
       if (req.file) removeFile(req.file.filename);
-      return res.status(404).json({ message: 'No Data Found' });
+      return res.fail(404, 'No Data Found');
     }
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
       if (req.file) removeFile(req.file.filename);
-      return res.status(503).json({ message: 'Database not connected' });
+      return res.fail(503, 'Database not connected');
     }
 
     if (result?.status === false) {
       if (req.file) removeFile(req.file.filename);
-      return res.status(400).json({
-        message: result?.message || 'Failed to save employee'
-      });
+      return res.fail(400, result?.message || 'Failed to save employee');
     }
 
-    return res.status(200).json({
-      success: true,
-      data: result,
-      message: result?.message || 'Employee saved successfully'
-    });
+    return res.success(result, result?.message || 'Employee saved successfully');
 
   } catch (error) {
     if (req.file) removeFile(req.file.filename);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.fail(500, 'Internal Server Error');
   }
 }
 
@@ -66,25 +61,18 @@ async function getAllEmployee(req, res) {
     const result = await getEmployees(voffset, vlimit);
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.status(503).json({ message: 'Database not connected' });
+      return res.fail(503, 'Database not connected');
     }
 
     if (!result || result.length === 0) {
-      return res.status(200).json({
-        data: [],
-        message: 'No Data Found'
-      });
+      return res.success([], 'No Data Found');
     }
 
-    return res.status(200).json({
-      success: true,
-      data: result,
-      message: 'Employees fetched successfully'
-    });
+    return res.success(result, 'Employees fetched successfully');
 
   } catch (error) {
-    console.log('getAllEmployee Error =>', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+   logger.error('getAllEmployee Error =>', error);
+    return res.fail(500, 'Internal Server Error');
   }
 }
 
@@ -98,17 +86,13 @@ async function DeleteEmployee(req, res) {
       req.user?.username || "System"
     );
 
-    return res.status(200).json({
-      message: result.message,
-    });
+    return res.success({}, result.message);
 
   } catch (error) {
 
-    console.log("DeleteEmployee Error =>", error);
+   logger.error("DeleteEmployee Error =>", error);
 
-    return res.status(500).json({
-      message: "Internal Server Error",
-    });
+    return res.fail(500, "Internal Server Error");
   }
 }
 

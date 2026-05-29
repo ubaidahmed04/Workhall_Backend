@@ -121,10 +121,11 @@ async function fetchAttendanceByDate(fromdate, todate) {
     }
   );
 
-  const rows = await result.outBinds.retval.getRows(1000);
+  const cursor = result.outBinds.retval;
 
-  await result.outBinds.retval.close();
-  await connection.close();
+  const rows = await cursor.getRows(1000);
+
+  await cursor.close();
 
   return rows.map((r,i) => ({
     uniqueId: r.ATTENDID != null ? String(r.ATTENDID) : `emp-${r.EMPID}-${i}`,

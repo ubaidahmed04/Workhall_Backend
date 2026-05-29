@@ -1,26 +1,20 @@
 // controllers/dailyWorksheet.controller.js
 
 const dailyWorksheetService = require("../services/dailyWorksheet.service");
+const logger = require('../config/logger');
 
 async function getDailyWorksheet(req, res) {
   try {
 
     const data = await dailyWorksheetService.getDailyWorksheet();
 
-    return res.status(200).json({
-      status: true,
-      message: "Daily worksheet fetched successfully",
-      data,
-    });
+    return res.success(data, "Daily worksheet fetched successfully");
 
   } catch (err) {
 
-    console.log("Get Daily Worksheet Error =>", err);
+    logger.error("Get Daily Worksheet Error =>", err);
 
-    return res.status(500).json({
-      status: false,
-      message: "Internal Server Error",
-    });
+    return res.fail(500, "Internal Server Error");
   }
 }
 

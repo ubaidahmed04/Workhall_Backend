@@ -20,7 +20,7 @@ async function loginController(req, res) {
     const { username, password } = req.body;
 
     if (!username?.trim() || !password?.trim()) {
-      return res.status(400).json({ message: "Username and password are required" });
+      return res.fail(400, "Username and password are required");
     }
 
     const user = await loginWeb(username.trim(), password);
@@ -36,8 +36,7 @@ async function loginController(req, res) {
 
     res.cookie("accessToken", token, COOKIE_OPTIONS);
 
-    return res.status(200).json({
-      message: "Login successful",
+    return res.success({
       user: {
         userid: user.userid,
         empid: user.empid,
@@ -45,18 +44,18 @@ async function loginController(req, res) {
         roleid: user.roleid,
         rolename: user.rolename,
       },
-    });
+    }, "Login successful");
   } catch (err) {
     logger.error({ event: "login_failed", error: err.message });
     const status = err.status || 500;
     const message = err.message || "Internal server error";
-    return res.status(status).json({ message });
+    return res.fail(status, message);
   }
 }
 
 function logout(req, res) {
   res.clearCookie("accessToken", COOKIE_OPTIONS);
-  return res.status(200).json({ message: "Logged out successfully" });
+  return res.success({}, "Logged out successfully");
 }
 
 module.exports = { loginController, logout };

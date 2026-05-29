@@ -10,11 +10,7 @@ function errorHandler(err, req, res, next) {
   // Error log
   logger.error(message);
 
-  res.status(statusCode).json({
-    success: false,
-    statusCode,
-    message,
-  });
+  return res.fail(statusCode, message);
 }
 
 module.exports = errorHandler;

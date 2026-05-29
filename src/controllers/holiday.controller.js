@@ -1,32 +1,28 @@
 'use strict';
 
 const { addEditHoliday, getHoliday } = require('../services/holiday.service');
+const logger = require('../config/logger');
 
 async function AddEditHoliday(req, res) {
   try {
     const actorId = req.user?.username || 'SYSTEM';
     const result = await addEditHoliday(req.body, actorId);
 
-    if (!result) return res.status(404).json({ message: 'No Data Found' });
+    if (!result) return res.fail(404, 'No Data Found');
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.status(503).json({ message: 'Database not connected' });
+      return res.fail(503, 'Database not connected');
     }
 
     if (result?.status === false) {
-      return res.status(400).json({
-        message: result?.message || 'Failed to save holiday'
-      });
+      return res.fail(400, result?.message || 'Failed to save holiday');
     }
 
-    return res.status(200).json({
-      data: result,
-      message: result?.message || 'Holiday saved successfully'
-    });
+    return res.success(result, result?.message || 'Holiday saved successfully');
 
   } catch (error) {
-    console.log('AddEditHoliday Error =>', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+   logger.error('AddEditHoliday Error =>', error);
+    return res.fail(500, 'Internal Server Error');
   }
 }
 
@@ -35,17 +31,14 @@ async function getAllHoliday(req, res) {
     const result = await getHoliday();
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.status(503).json({ message: 'Database not connected' });
+      return res.fail(503, 'Database not connected');
     }
 
-    return res.status(200).json({
-      data: result || [],
-      message: result?.length ? 'Holiday fetched successfully' : 'No Data Found'
-    });
+    return res.success(result || [], result?.length ? 'Holiday fetched successfully' : 'No Data Found');
 
   } catch (error) {
-    console.log('getAllHoliday Error =>', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+   logger.error('getAllHoliday Error =>', error);
+    return res.fail(500, 'Internal Server Error');
   }
 }
 

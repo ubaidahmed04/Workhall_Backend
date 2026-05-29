@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post('/add-edit', authenticate, authorize([1, 2, 3]),  upload.single("vimage") , AddEditEmployee);
 router.get('/get-all',   authenticate,  getAllEmployee);
-router.delete("/:id", authenticate, DeleteEmployee );
+router.delete("/:id", authenticate, authorize([1, 2, 3]), DeleteEmployee );
 
 
 module.exports = router;

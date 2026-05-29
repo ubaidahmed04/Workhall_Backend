@@ -7,12 +7,19 @@ const httpStatus = require('../constants/httpStatus');
  */
 function responseFormatter(_req, res, next) {
   res.success = function success(payload = {}, message = 'OK', status = httpStatus.OK) {
+    if (typeof message === 'number') {
+      status = message;
+      message = payload?.message || 'OK';
+    } else if (message === 'OK' && payload?.message) {
+      message = payload.message;
+    }
+
     return res.status(status).json({
       success: true,
       code: status,
       message,
-      data: payload.data !== undefined ? payload.data : payload,
-      meta: payload.meta,
+      data: payload?.data !== undefined ? payload.data : payload,
+      meta: payload?.meta,
     });
   };
 

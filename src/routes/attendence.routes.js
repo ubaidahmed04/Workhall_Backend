@@ -11,6 +11,6 @@ router.get('/by-date',   authenticate, getAttendanceByDate);
 router.post('/add-edit',  authenticate, authorize([1, 2, 3]),   AddEditAttendance);
 
 router.get("/dept-attendance-summary",   authenticate, getDeptAttendanceSummary );
-router.delete('/:id',     authenticate, deleteAttendance)
+router.delete('/:id',     authenticate, authorize([1, 2, 3]), deleteAttendance)
 
 module.exports = router;

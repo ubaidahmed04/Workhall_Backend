@@ -12,12 +12,10 @@ async function health(_req, res) {
     db = 'down';
   }
 
-  return res.status(200).json({
-    data: {
-      service: 'nutrackx-backend',
-      db
-    }
-  });
+  return res.success({
+    service: 'nutrackx-backend',
+    db
+  }, 'Health check successful');
 }
 
 module.exports = { health };

@@ -4,7 +4,7 @@ function authorize(allowedRoles = []) {
     const role = req.user?.roleid;
 
     if (!role) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.fail(401, 'Unauthorized');
     }
 
     if (role === 1) { //  SUPER_ADMIN roleid assume
@@ -12,7 +12,7 @@ function authorize(allowedRoles = []) {
     }
 
     if (!allowedRoles.includes(role)) {
-      return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
+      return res.fail(403, 'Access denied. Insufficient permissions.');
     }
 
     next();

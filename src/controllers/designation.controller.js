@@ -1,6 +1,7 @@
 'use strict';
 
 const { addEditDesig, getDesignation } = require('../services/designation.service');
+const logger = require('../config/logger');
 
 async function addEditDesignation(req, res) {
   try {
@@ -8,30 +9,23 @@ async function addEditDesignation(req, res) {
     const result = await addEditDesig(req.body, actorId);
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.status(503).json({ message: 'Database not connected' });
+      return res.fail(503, 'Database not connected');
     }
 
     if (result?.status === false) {
-      return res.status(400).json({
-        message: result?.message || 'Failed to save designation'
-      });
+      return res.fail(400, result?.message || 'Failed to save designation');
     }
 
     if (result === null || result === undefined) {
-      return res.status(404).json({ message: 'No Data Found' });
+      return res.fail(404, 'No Data Found');
     }
 
-    return res.status(200).json({
-      data: result,
-      message: result?.message || 'Designation saved successfully'
-    });
+    return res.success(result, result?.message || 'Designation saved successfully');
 
   } catch (error) {
-    console.log('addEditDesignation Error =>', error);
+    logger.error('addEditDesignation Error =>', error);
 
-    return res.status(500).json({
-      message: 'Internal Server Error'
-    });
+    return res.fail(500, 'Internal Server Error');
   }
 }
 
@@ -40,20 +34,15 @@ async function getAllDesignation(req, res) {
     const result = await getDesignation();
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
-      return res.status(503).json({ message: 'Database not connected' });
+      return res.fail(503, 'Database not connected');
     }
 
-    return res.status(200).json({
-      data: result || [],
-      message: result?.length ? 'Designation fetched successfully' : 'No Data Found'
-    });
+    return res.success(result || [], result?.length ? 'Designation fetched successfully' : 'No Data Found');
 
   } catch (error) {
-    console.log('getAllDesignation Error =>', error);
+   logger.error('getAllDesignation Error =>', error);
 
-    return res.status(500).json({
-      message: 'Internal Server Error'
-    });
+    return res.fail(500, 'Internal Server Error');
   }
 }
 
