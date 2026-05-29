@@ -6,12 +6,12 @@ const { addBranch, getBranches } = require('../services/branch.service');
 async function AddEditBranch(req, res) {
   try {
     const actorId = req.user?.username || 'SYSTEM';
-    // const result = await addBranch(req.body, actorId);
+    const result = await addBranch(req.body, actorId);
 
     return res.success({
-      // data: result,
-      // message: result?.message || 'Branch saved successfully'
-    }, 'OK');
+      data: result,
+      message: result?.message || 'Branch saved successfully'
+    });
 
   } catch (error) {
     console.error('AddEditBranch Error =>', error);

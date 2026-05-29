@@ -47,9 +47,9 @@ async function addEditDepartment(payload, actor) {
             {
                 vdepid: vdepid || null,
                 vdepname,
-                vtimein: timeStringToDate(vtimein),           //  Now a Date
-                vtimeout: timeStringToDate(vtimeout),          //
-                vgracetimeperiod: timeStringToDate(vgracetimeperiod),
+                vtimein: new Date(vtimein),           //  Now a Date
+                vtimeout: new Date(vtimeout),          //
+                vgracetimeperiod: new Date(vgracetimeperiod),
                 vstatus,
                 vtaskaccess,
                 vcreatedby: actor,
