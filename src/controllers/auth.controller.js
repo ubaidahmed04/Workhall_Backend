@@ -9,11 +9,11 @@ const isProduction = process.env.NODE_ENV === "production";
 // Cookie config — cross-origin ke liye SameSite=None + Secure=true zaroori hai
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: isProduction,               // production mein HTTPS only
-  sameSite: isProduction ? "none" : "lax", // cross-origin ke liye "none"
-  maxAge: 8 * 60 * 60 * 1000,        // 8 hours in ms
+  secure: true,        // was: isProduction (false if NODE_ENV not set correctly)
+  sameSite: "none",    // was: "lax" in dev — "lax" BLOCKS cross-origin cookies
+  maxAge: 8 * 60 * 60 * 1000,
   path: "/",
-};
+}
 
 async function loginController(req, res) {
   try {
@@ -54,7 +54,12 @@ async function loginController(req, res) {
 }
 
 function logout(req, res) {
-  res.clearCookie("accessToken", COOKIE_OPTIONS);
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  });
   return res.success({}, "Logged out successfully");
 }
 
