@@ -9,7 +9,7 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 oracledb.autoCommit = false;
 
 oracledb.initOracleClient({
-    libDir:"/cloudclusters/instantclient_23_26"
+    libDir:"/cloudclusters/instantclient_23_5"
 })
 let pool;
 
