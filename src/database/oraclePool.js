@@ -1,4 +1,3 @@
-
 'use strict';
 
 const oracledb = require('oracledb');
@@ -9,7 +8,8 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 oracledb.autoCommit = false;
 
 oracledb.initOracleClient({
-    libDir:"/cloudclusters/instantclient_23_5"
+    libDir:"/cloudclusters/instantclient_23_5" // for production 
+    // libDir:"../../Oracle/instantclient_21_3" // for local 
 })
 let pool;
 
@@ -108,4 +108,3 @@ module.exports = {
   withTransaction,
   closePool,
 };
-

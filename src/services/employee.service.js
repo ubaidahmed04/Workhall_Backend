@@ -5,44 +5,6 @@ const fs = require("fs");
 const path = require("path");
 
 
-function parseSkills(raw) {
-  if (!raw) return null;
-
-  if (Array.isArray(raw) && raw.length > 0 && typeof raw[0] === "object") {
-    return raw; // already fine
-  }
-
-  if (typeof raw === "string") {
-    try {
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : null;
-    } catch {
-      return null;
-    }
-  }
-
-  if (Array.isArray(raw)) {
-    try {
-      return raw.map((item) => (typeof item === "string" ? JSON.parse(item) : item));
-    } catch {
-      return null;
-    }
-  }
-
-  return null;
-}
-
-function normaliseSkill(skill) {
-  if (typeof skill === "string" || typeof skill === "number") {
-    return { skillid: Number(skill), skillstatus: 1, certificates: [] };
-  }
-  return {
-    skillid: Number(skill.skillid ?? skill.vfk_skillid),
-    skillstatus: skill.skillstatus !== undefined ? Number(skill.skillstatus) : 1,
-    certificates: Array.isArray(skill.certificates) ? skill.certificates.map(Number) : [],
-  };
-}
-
 async function addEditEmp(body, actorId) {
   const {
     vempid,
@@ -64,32 +26,10 @@ async function addEditEmp(body, actorId) {
     imageUrl,   //
   } = body;
 
-  const skillsParsed = parseSkills(body.vskills);
-  const skillObjects = skillsParsed ? skillsParsed.map(normaliseSkill) : null;
 
   const emergencyContact = vemergencycontact ?? vemgphone ?? null;
 
   return withConnection(async (conn) => {
-
-    let skillTableVal = null;
-    let SkillTableType = null;
-
-    if (skillObjects && skillObjects.length > 0) {
-      const SkillObj = await conn.getDbObjectClass("SKILL_OBJ");
-      const CertTable = await conn.getDbObjectClass("CERT_TABLE");
-      SkillTableType = await conn.getDbObjectClass("SKILL_TABLE");
-
-      skillTableVal = new SkillTableType(
-        skillObjects.map((s) => {
-          const certTable = new CertTable(s.certificates);
-          return new SkillObj({
-            SKILLID: s.skillid,
-            SKILLSTATUS: s.skillstatus,
-            CERTIFICATES: certTable,
-          });
-        })
-      );
-    }
 
     // ── Execute procedure ───────────────────────────────────────────────────
     const result = await conn.execute(
@@ -107,7 +47,6 @@ async function addEditEmp(body, actorId) {
         :vfk_qualifid,
         :vfk_departid,
         :vfk_designid,
-        :vskills,
         :vmajor,
         :vstatus,
         :vimagestatus,
@@ -132,9 +71,7 @@ async function addEditEmp(body, actorId) {
         vfk_departid: vfk_departmentid ? Number(vfk_departmentid) : null,
         vfk_designid: vfk_designationid ? Number(vfk_designationid) : null,
 
-        vskills: skillTableVal
-          ? { val: skillTableVal, type: SkillTableType }
-          : { val: null, type: oracledb.DB_TYPE_OBJECT },
+        // vskills: { val: [], type: oracledb.DB_TYPE_OBJECT },
 
         vmajor: vmajor || null,
         vstatus: vstatus !== undefined ? Number(vstatus) : 0,
@@ -149,7 +86,6 @@ async function addEditEmp(body, actorId) {
       },
       { autoCommit: true }
     );
-
     logger.debug(result);
 
     return { message: result?.outBinds?.vmessage };
@@ -201,10 +137,6 @@ async function getEmployees(voffset = 0, vlimit = 10) {
       image: row.IMAGE || null,
       hrdocid: row.HRDOCID || null,
 
-      skills: row?.FK_SKILLIDS
-        ? row.FK_SKILLIDS.split(",").map((id) => Number(id.trim()))
-        : [],
-      skillnames: row.SKILLNAMES || ""
     }));
   });
 }

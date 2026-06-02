@@ -29,7 +29,6 @@ async function AddEditEmployee(req, res) {
     }
 
     const result = await addEditEmp(req.body, actorId);
-
     if (!result) {
       if (req.file) removeFile(req.file.filename);
       return res.fail(404, 'No Data Found');
@@ -49,7 +48,10 @@ async function AddEditEmployee(req, res) {
 
   } catch (error) {
     if (req.file) removeFile(req.file.filename);
-    return res.fail(500, 'Internal Server Error');
+    return res.fail(
+    500,
+    error.message || "Internal Server Error"
+  );
   }
 }
 
