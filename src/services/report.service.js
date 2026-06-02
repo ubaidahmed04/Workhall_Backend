@@ -44,6 +44,7 @@ async function getMonthReport({
     return rows?.map((row) => ({
       firstname: row.FIRSTNAME,
       workingday: row.WORKINGDAY,
+      branchname: row.BRANCHNAME,
       dayType: row.DAY_TYPE,
       remarks: row.REMARKS,
       empId: row.FK_EMPID,

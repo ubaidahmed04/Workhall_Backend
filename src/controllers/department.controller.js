@@ -25,7 +25,7 @@ async function addEditDepart(req, res) {
   } catch (error) {
     logger.error('addEditDepart Error =>', error);
 
-    return res.fail(500, 'Internal Server Error');
+    return res.fail(500, 'Internal Server Error', error);
   }
 }
 
