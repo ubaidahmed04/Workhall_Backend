@@ -59,8 +59,8 @@ async function getAllEmployee(req, res) {
   try {
     const voffset = Number(req.query.offset) || 0;
     const vlimit = Number(req.query.limit) || 10;
-
-    const result = await getEmployees(voffset, vlimit);
+    const vtype = req.query.type || "current";
+    const result = await getEmployees(voffset, vlimit, vtype);
 
     if (result?.code === 'DB_CONNECTION_ERROR') {
       return res.fail(503, 'Database not connected');

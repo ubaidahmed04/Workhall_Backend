@@ -92,17 +92,18 @@ async function addEditEmp(body, actorId) {
   });
 }
 
-async function getEmployees(voffset = 0, vlimit = 10) {
+async function getEmployees(voffset = 0, vlimit = 10, vtype) {
   logger.info({ voffset, vlimit }, "Fetching employee list");
 
   return withConnection(async (conn) => {
     const result = await conn.execute(
       `BEGIN
-        get_emp(:voffset, :vlimit, :retval);
+        get_employees(:voffset, :vlimit, :vtype, :retval);
        END;`,
       {
         voffset,
         vlimit,
+        vtype,
         retval: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR },
       },
       { outFormat: oracledb.OUT_FORMAT_OBJECT }

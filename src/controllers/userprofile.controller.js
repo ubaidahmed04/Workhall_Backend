@@ -30,7 +30,7 @@ async function addUserProfile(req, res) {
   } catch (error) {
    logger.error('addUserProfile Error =>', error);
 
-    return res.fail(httpStatus.INTERNAL_SERVER_ERROR, 'Internal Server Error');
+    return res.fail(httpStatus.INTERNAL_SERVER_ERROR, 'Internal Server Error',error);
   }
 }
 

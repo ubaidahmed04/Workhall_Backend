@@ -45,7 +45,7 @@ async function loginWeb(username, password) {
 
     // user not found or blocked
     if (!vuserid) {
-      throw { status: 401, message: vmessage || "Invalid username or password" };
+      throw { status: 403, message: vmessage || "Invalid username or password" };
     }
 
     // IMPORTANT FIX: use vpassword_o instead of vmessage
@@ -55,7 +55,7 @@ async function loginWeb(username, password) {
 
     const passwordMatch = await bcrypt.compare(password, vpassword_o);
     if (!passwordMatch) {
-      throw { status: 401, message: "Invalid username or password" };
+      throw { status: 403, message: "Invalid username or password" };
     }
 
     logger.info({
