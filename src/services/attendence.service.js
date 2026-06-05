@@ -180,6 +180,7 @@ async function getDeptAttSummary() {
       total_employees: r.TOTAL_EMPLOYEES,
       present_employees: r.PRESENT_EMPLOYEES,
       absent_employees: r.ABSENT_EMPLOYEES,
+      time_not_started: r.TIME_NOT_STARTED,
     }));
   });
 }

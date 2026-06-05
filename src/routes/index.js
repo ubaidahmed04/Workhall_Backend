@@ -20,6 +20,7 @@ const branchRoutes = require('./branch.routes.js');
 const attendenceRoutes = require('./attendence.routes.js');
 const dailyWorkSheetRoutes = require('./dailyWorksheet.routes.js');
 const ReportRoutes = require('./report.routes.js');
+const ShiftRoutes = require('./shift.routes.js');
 
 const router = express.Router();
 
@@ -31,6 +32,7 @@ router.use('/designation', designationRoutes);
 router.use('/roles', roleRoutes);
 router.use('/qualification', qualificationRoutes);
 router.use('/skills', skillsRoutes);
+router.use('/shift', ShiftRoutes);
 router.use('/holiday', holidayRoutes);
 router.use('/client', clientRoutes);
 router.use('/employee', employeeRoutes);
