@@ -21,6 +21,7 @@ const attendenceRoutes = require('./attendence.routes.js');
 const dailyWorkSheetRoutes = require('./dailyWorksheet.routes.js');
 const ReportRoutes = require('./report.routes.js');
 const ShiftRoutes = require('./shift.routes.js');
+const RolePermissionRoutes = require('./rolePermission.routes.js');
 
 const router = express.Router();
 
@@ -43,6 +44,7 @@ router.use('/branch', branchRoutes);
 router.use('/attendance', attendenceRoutes);
 router.use('/worksheet', dailyWorkSheetRoutes);
 router.use('/attendance', ReportRoutes);
+router.use('/rolePerm', RolePermissionRoutes);
 
 // router.use('/', roleRoutes);
 

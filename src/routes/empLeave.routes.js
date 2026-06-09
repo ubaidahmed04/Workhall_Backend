@@ -4,8 +4,11 @@ const router = require("express").Router();
 const { AddEditEmpLeave,GetEmpLeaves } = require("../controllers/empLeave.controller");
 const { authenticate } = require("../middleware/auth.middleware");
 const authorize = require("../middleware/authorize.middleware");
+const checkAccess = require("../middleware/checkAccess.middleware");
 
-router.post("/add-edit", authenticate,  authorize([1, 2, 3]), AddEditEmpLeave);
+router.post("/add-edit", authenticate,  checkAccess("Add Leaves"),
+    // authorize([1, 2, 3]),
+    AddEditEmpLeave);
 
 router.get("/get-all",   authenticate, GetEmpLeaves);
 

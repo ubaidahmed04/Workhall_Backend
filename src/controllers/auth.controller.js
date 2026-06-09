@@ -2,6 +2,7 @@
 
 const logger = require("../config/logger.js");
 const { loginWeb } = require("../services/auth.service.js");
+const { getRolePermissions } = require("../services/rolePerm.service.js");
 const { signAccessToken } = require("../utils/jwt.util.js");
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -22,14 +23,16 @@ async function loginController(req, res) {
     if (!username?.trim() || !password?.trim()) {
       return res.fail(400, "Username and password are required");
     }
-
     const user = await loginWeb(username.trim(), password);
 
+    const allowedPerm = (user.permissions || []).map(p => p.modulename);
+    // console.log("allowedPerm",allowedPerm)
     const tokenPayload = {
       userid: user.userid,
       empid: user.empid,
       username: user.username,
       roleid: user.roleid,
+      pages : allowedPerm
     };
 
     const token = signAccessToken(tokenPayload);
@@ -43,6 +46,8 @@ async function loginController(req, res) {
         username: user.username,
         roleid: user.roleid,
         rolename: user.rolename,
+        permissions : user.permissions
+
       },
     }, "Login successful");
   } catch (err) {
