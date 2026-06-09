@@ -5,7 +5,7 @@ const authorize = require('../middleware/authorize.middleware');
 const router = express.Router();
 
 
-router.post( '/add-edit', authorize, AddEditRoleWithPermissions );
-router.get( '/get-all',   authorize, GetModules );
-router.get('/permissions',authorize, GetRolePermissions );
+router.post('/add-edit',  AddEditRoleWithPermissions );
+router.get( '/get-all',    GetModules );
+router.get('/permissions', GetRolePermissions );
 module.exports = router;
