@@ -1,78 +1,82 @@
 'use strict';
 
 const oracledb = require('oracledb');
-const { withConnection } = require("../database/oraclePool");
+const { withConnection } = require('../database/oraclePool');
 const logger = require('../config/logger');
 
-async function addClient(payload, actor) {
+async function addEditClient(payload, actorId) {
+  const {
+    vclientid, vclientname, vaddress, vcontact, vemail,
+    vstartdate, venddate, vfk_condocid, vcondoc, vimagestatus, vstatus
+  } = payload;
+  
+  return withConnection(async (conn) => {
+    const result = await conn.execute(
+      `BEGIN
+          add_edit_client(
+            :vclientid, :vclientname, :vaddress, :vcontact, :vemail,
+            :vstartdate, :venddate, :vfk_condocid, :vcondoc, :vimagestatus,
+            :vstatus, :vcreatedby, :vmessage
+          );
+      END;`,
+      {
+        vclientid: vclientid ? Number(vclientid) : null,
+        vclientname: vclientname || null,
+        vaddress: vaddress || null,
+        vcontact: vcontact || null,
+        vemail: vemail || null,
+        vstartdate: vstartdate ? new Date(vstartdate) : null,
+        venddate: venddate ? new Date(venddate) : null,
+        vfk_condocid: vfk_condocid ? Number(vfk_condocid) : null,
+        vcondoc: vcondoc || null,
+        vimagestatus: vimagestatus !== undefined ? Number(vimagestatus) : 0,
+        vstatus: vstatus !== undefined ? Number(vstatus) : 0,
+        vcreatedby: actorId,
+        vmessage: { dir: oracledb.BIND_OUT, type: oracledb.STRING, maxSize: 500 }
+      },
+      { autoCommit: true }
+    );
 
-    const {
-        vskillid,
-        vskillname,
-        vstatus
-    } = payload;
-
-    return withConnection(async (conn) => {
-
-        const result = await conn.execute(
-            `BEGIN
-                add_edit_skill(
-                    :vskillid,
-                    :vskillname,
-                    :vstatus,
-                    :vcreatedby,
-                    :vmessage
-                );
-            END;`,
-            {
-                vskillid: vskillid || null,
-                vskillname,
-                vstatus,
-                // logged in user
-                vcreatedby: actor,
-                // OUT parameter
-                vmessage: {
-                    dir: oracledb.BIND_OUT,
-                    type: oracledb.STRING
-                }
-            }
-        );
-        logger.debug(result);
-        const message = result?.outBinds?.vmessage;
-        return {
-            message
-        };
-    });
+    return { status: true, message: result?.outBinds?.vmessage };
+  });
 }
 
-async function getClients() {
-    logger.info('Fetching skills list');
-    return withConnection(async (conn) => {
-        const result = await conn.execute(
-            `BEGIN
-                get_skills(:retval);
-            END;`,
-            {
-                retval: {
-                    dir: oracledb.BIND_OUT,
-                    type: oracledb.CURSOR
-                }
-            }
-        );
-        const resultSet = result.outBinds.retval;
-        const rows = await resultSet.getRows(); // fetch all rows
-        await resultSet.close();
-        logger.debug(rows);
-        return rows.map(row => ({
-            skillid: row.SKILLID,
-            skillname: row.SKILLNAME,
-            status: row.STATUS
-        }));
-    });
-}
+async function getClient(filters = {}) {
+  const { vstartdate, venddate, vclientid } = filters;
 
+  return withConnection(async (conn) => {
+    const result = await conn.execute(
+      `BEGIN get_client(:vstartdate, :venddate, :vclientid, :retval); END;`,
+      {
+        vstartdate: vstartdate ? new Date(vstartdate) : null,
+        venddate: venddate ? new Date(venddate) : null,
+        vclientid: vclientid ? Number(vclientid) : null,
+        retval: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR }
+      }
+    );
+
+    const rs = result.outBinds.retval;
+    const rows = await rs.getRows();
+    await rs.close();
+
+    return rows.map((row) => ({
+      clientid: row.CLIENTID,
+      clientname: row.CLIENTNAME,
+      address: row.ADDRESS,
+      phone: row.PHONE,
+      email: row.EMAIL,
+      startdate: row.STARTDATE,
+      enddate: row.ENDDATE,
+      fk_condocid: row.FK_CONDOCID,
+      image: row.IMAGE,
+      status: row.STATUS,
+      createdby: row.CREATEDBY,
+      editby: row.EDITBY
+    }));
+  });
+}
 
 module.exports = {
-    addClient,
-    getClients
+  addEditClient,
+  getClient
 };

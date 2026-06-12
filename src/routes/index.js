@@ -22,6 +22,9 @@ const dailyWorkSheetRoutes = require('./dailyWorksheet.routes.js');
 const ReportRoutes = require('./report.routes.js');
 const ShiftRoutes = require('./shift.routes.js');
 const RolePermissionRoutes = require('./rolePermission.routes.js');
+const ProjectRoutes = require('./project.routes.js');
+const TaskRoutes = require('./task.routes.js');
+const salaryheadRoutes = require('./salaryHead.routes.js');
 
 const router = express.Router();
 
@@ -45,7 +48,9 @@ router.use('/attendance', attendenceRoutes);
 router.use('/worksheet', dailyWorkSheetRoutes);
 router.use('/attendance', ReportRoutes);
 router.use('/rolePerm', RolePermissionRoutes);
+router.use('/project', ProjectRoutes);
+router.use('/task', TaskRoutes);
+router.use('/salaryhead', salaryheadRoutes);
 
-// router.use('/', roleRoutes);
 
 module.exports = router;

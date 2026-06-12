@@ -4,12 +4,9 @@ const { addEditEmp, getEmployees, deleteEmployee } = require('../services/employ
 const path = require('path');
 const fs = require('fs');
 const logger = require('../config/logger');
+const { buildImageUrl } = require('../helpers/buildImageUrl');
 
-function buildImageUrl(filename) {
-  if (!filename) return null;
-  const base = (process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
-  return `${base}/uploads/${filename}`;
-}
+
 
 function removeFile(filename) {
   if (!filename) return;

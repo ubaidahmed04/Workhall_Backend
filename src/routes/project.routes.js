@@ -4,15 +4,14 @@ const express = require('express');
 const { authenticate, optionalAuth } = require('../middleware/auth.middleware');
 const authorize = require('../middleware/authorize.middleware');
 const checkAccess = require('../middleware/checkAccess.middleware');
-const { AddEditClient,   GetAllClient } = require('../controllers/client.controller');
-const upload = require('../middleware/upload');
+const { getAllProject, AddEditProject } = require('../controllers/project.controller');
 
 const router = express.Router();
 
-router.post('/add-edit', authenticate, checkAccess('Client'), upload.single('vcondoc'),
+router.post('/add-edit', authenticate, checkAccess('Category'),
     // authorize([1, 2, 3]),
-    AddEditClient);
-router.get('/get-all', authenticate ,   GetAllClient);
+    AddEditProject);
+router.get('/get-all',   authenticate, getAllProject);
 
 
 
