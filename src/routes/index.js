@@ -25,6 +25,8 @@ const RolePermissionRoutes = require('./rolePermission.routes.js');
 const ProjectRoutes = require('./project.routes.js');
 const TaskRoutes = require('./task.routes.js');
 const salaryheadRoutes = require('./salaryHead.routes.js');
+const payrollRoutes = require('./payroll.routes.js');
+const payrollStructureRoutes = require('./payrollStructure.routes.js');
 
 const router = express.Router();
 
@@ -51,6 +53,8 @@ router.use('/rolePerm', RolePermissionRoutes);
 router.use('/project', ProjectRoutes);
 router.use('/task', TaskRoutes);
 router.use('/salaryhead', salaryheadRoutes);
+router.use('/payroll', payrollRoutes);
+router.use('/payrollStructure', payrollStructureRoutes);
 
 
 module.exports = router;
