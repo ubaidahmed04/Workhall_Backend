@@ -11,8 +11,8 @@ async function AddEditTask(req, res) {
     const actorId = req.user?.username || 'SYSTEM';
     if (req.file) req.body.vtaskdoc = buildImageUrl(req.file.filename);
 
-    logger.info("TASK INSERT PAYLOAD =>", req.body);
-    logger.info("TASK DOC =>", req.file);
+    // logger.info("TASK INSERT PAYLOAD =>", req.body);
+    // logger.info("TASK DOC =>", req.file);
 
     const result = await addTask(req.body, actorId);
     if (!result) return res.fail(400, 'Unable to save task');

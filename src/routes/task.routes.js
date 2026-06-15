@@ -11,13 +11,13 @@ const upload = require('../middleware/upload');
 
 const router = express.Router();
 
-router.post('/add-edit',  upload.single('vtaskdoc'), checkAccess('Task'),
+router.post('/add-edit', authenticate, upload.single('vtaskdoc'), checkAccess('Task'),
     // authorize([1, 2, 3]),
     AddEditTask);
-router.get('/getProject',       getAllProject);
-router.get('/getTaskStatus',    getAllTaskStatus);
-router.get('/getPriority',      getAllPriority);
-router.get('/get-all',          GetAllTask);
+router.get('/getProject',    authenticate,   getAllProject);
+router.get('/getTaskStatus', authenticate,   getAllTaskStatus);
+router.get('/getPriority',   authenticate,   getAllPriority);
+router.get('/get-all',       authenticate,   GetAllTask);
 
 
 

@@ -12,8 +12,8 @@ async function addTask(payload, actorId) {
         vtaskreview, vimagestatus, vstatus, vcomplainby
     } = payload;
 
-    logger.debug(payload);
-    logger.info("yaha tk aya he");
+    // logger.debug(payload);
+    // logger.info("yaha tk aya he");
 
     return withConnection(async (conn) => {
         const result = await conn.execute(
