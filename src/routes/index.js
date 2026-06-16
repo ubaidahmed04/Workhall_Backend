@@ -27,6 +27,8 @@ const TaskRoutes = require('./task.routes.js');
 const salaryheadRoutes = require('./salaryHead.routes.js');
 const payrollRoutes = require('./payroll.routes.js');
 const payrollStructureRoutes = require('./payrollStructure.routes.js');
+const allowanceRoutes = require('./allowancetransaction.routes.js');
+const roomsRoutes = require('./room.route.js');
 
 const router = express.Router();
 
@@ -55,6 +57,8 @@ router.use('/task', TaskRoutes);
 router.use('/salaryhead', salaryheadRoutes);
 router.use('/payroll', payrollRoutes);
 router.use('/payrollStructure', payrollStructureRoutes);
+router.use('/allowance', allowanceRoutes);
+router.use('/room', roomsRoutes);
 
 
 module.exports = router;
