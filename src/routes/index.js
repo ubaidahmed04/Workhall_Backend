@@ -29,6 +29,7 @@ const payrollRoutes = require('./payroll.routes.js');
 const payrollStructureRoutes = require('./payrollStructure.routes.js');
 const allowanceRoutes = require('./allowancetransaction.routes.js');
 const roomsRoutes = require('./room.route.js');
+const rentRoutes = require('./rent.route.js');
 
 const router = express.Router();
 
@@ -59,6 +60,7 @@ router.use('/payroll', payrollRoutes);
 router.use('/payrollStructure', payrollStructureRoutes);
 router.use('/allowance', allowanceRoutes);
 router.use('/room', roomsRoutes);
+router.use('/rent', rentRoutes);
 
 
 module.exports = router;
