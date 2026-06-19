@@ -1,7 +1,7 @@
 'use strict';
 
 const logger = require('../config/logger');
-const { getAllowanceTransaction , addEditAllowance} = require('../services/allowancetransaction.service');
+const { getAllowanceTransaction , addEditAllowance, getAllowanceReport} = require('../services/allowancetransaction.service');
 
 async function AddEditAllowance(req, res) {
   try {
@@ -75,7 +75,46 @@ async function GetAllAllowance(
   }
 }
 
+async function GetAllowanceReport(req, res) {
+  try {
+    const { vempid, vdate } = req.query;
+    console.log("date ", vdate, vempid)
+    const result = await getAllowanceReport(
+      vempid,
+      vdate
+    );
+
+    if (
+      result?.code ===
+      "DB_CONNECTION_ERROR"
+    ) {
+      return res.fail(
+        503,
+        "Database not connected"
+      );
+    }
+
+    return res.success(
+      result || [],
+      result?.length
+        ? "Allowance report fetched successfully"
+        : "No Data Found"
+    );
+  } catch (error) {
+    logger.error(
+      "GetAllowanceReport Error =>",
+      error
+    );
+
+    return res.fail(
+      500,
+      "Internal Server Error"
+    );
+  }
+}
+
 module.exports = {
   AddEditAllowance,
-  GetAllAllowance
+  GetAllAllowance,
+  GetAllowanceReport
 };

@@ -132,8 +132,53 @@ async function getAllowanceTransaction() {
   });
 }
 
+async function getAllowanceReport(empid, date) {
+  logger.info("Fetching Allowance Report");
+
+  return withConnection(async (conn) => {
+    const result = await conn.execute(
+      `BEGIN
+          get_allowancetrans_report(
+            :vempid,
+            :vdate,
+            :retval
+          );
+       END;`,
+      {
+        vempid: empid || null,
+        vdate: { val: date ? new Date(date) : null, type: oracledb.DATE },
+        retval: {
+          dir: oracledb.BIND_OUT,
+          type: oracledb.CURSOR,
+        },
+      },
+      {
+        outFormat: oracledb.OUT_FORMAT_OBJECT,
+      }
+    );
+
+    const resultSet = result.outBinds.retval;
+
+    const rows = await resultSet.getRows(10000);
+
+    await resultSet.close();
+
+    return rows.map((row) => ({
+      fk_empid: row.FK_EMPID,
+      firstname: row.FIRSTNAME,
+      lastname: row.LASTNAME,
+      fk_salaryheadid: row.FK_SALARYHEADID,
+      headname: row.HEADNAME,
+      total: row.TOTAL,
+      allowancedate: row.ALLOWANCEDATE,
+      status: row.STATUS,
+    }));
+  });
+}
+
 
 module.exports = {
   addEditAllowance,
-  getAllowanceTransaction
+  getAllowanceTransaction,
+  getAllowanceReport
 };
