@@ -19,6 +19,7 @@ async function addEditEmp(body, actorId) {
     vfk_qualificationid,
     vfk_departmentid,
     vfk_designationid,
+    vfk_branchid,
     vfk_shiftid,
     vmajor,
     vstatus,
@@ -48,6 +49,7 @@ async function addEditEmp(body, actorId) {
         :vfk_qualifid,
         :vfk_departid,
         :vfk_designid,
+        :vfk_branchid,
         :vfk_shiftid,
         :vmajor,
         :vstatus,
@@ -72,6 +74,7 @@ async function addEditEmp(body, actorId) {
         vfk_qualifid: vfk_qualificationid ? Number(vfk_qualificationid) : null,
         vfk_departid: vfk_departmentid ? Number(vfk_departmentid) : null,
         vfk_designid: vfk_designationid ? Number(vfk_designationid) : null,
+        vfk_branchid: vfk_branchid ? Number(vfk_branchid) : null,
         vfk_shiftid: vfk_shiftid ? Number(vfk_shiftid) : null,
 
         // vskills: { val: [], type: oracledb.DB_TYPE_OBJECT },
@@ -130,11 +133,14 @@ async function getEmployees(voffset = 0, vlimit = 10, vtype) {
       fk_departmentid: row.FK_DEPARTMENTID,
       fk_designationid: row.FK_DESIGNATIONID,
       fk_shiftid: row.FK_SHIFTID,
+      fk_shiftid: row.FK_SHIFTID,
       
       qualificaname: row.QUALIFICANAME,
       depname: row.DEPNAME,
       designame: row.DESIGNAME,
       shiftname: row.SHIFTNAME,
+      fk_branchid: row.FK_BRANCHID,
+      branchname: row.BRANCHNAME,
 
       joindate: row.JOINDATE,
       exitdate: row.EXITDATE,
