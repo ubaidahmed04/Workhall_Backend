@@ -9,7 +9,7 @@ const { GetSalaryStructureByEmployee } = require('../controllers/payroll.control
 
 const router = express.Router();
 
-router.post('/add-edit', authenticate, checkAccess('Category'),
+router.post('/add-edit', authenticate, checkAccess('Payroll Structure'),
     // authorize([1, 2, 3]),
     AddEditPayrollStructure);
 router.get('/get-all',   authenticate, GetAllPayrollStructure);

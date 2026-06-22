@@ -8,7 +8,7 @@ const { AddEditPayslip, GetPayslip, GetPayslipById, DeletePayslip } = require('.
 
 const router = express.Router();
 
-router.post('/add-edit', authenticate, checkAccess('Category'),
+router.post('/add-edit', authenticate, checkAccess('Payroll'),
     // authorize([1, 2, 3]),
     AddEditPayslip);
 router.get('/get-all',   authenticate, GetPayslip);

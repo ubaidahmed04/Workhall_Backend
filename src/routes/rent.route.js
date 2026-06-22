@@ -8,7 +8,7 @@ const { AddEditRent, GetRentDetailAvail, GetRentDetail } = require('../controlle
 
 const router = express.Router();
 
-router.post('/add-edit',  authenticate, checkAccess('workspace rent'),
+router.post('/add-edit',  authenticate, checkAccess('Workspace Rental'),
     // authorize([1, 2, 3]),
     AddEditRent);
 router.get('/get-all', authenticate , GetRentDetail);
