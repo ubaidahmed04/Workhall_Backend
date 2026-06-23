@@ -3,6 +3,6 @@ const router = express.Router();
 
 const { addEditTask } = require("../controllers/taskController");
 
-router.post("/task/add-edit", addEditTask);
+router.post("/task/app/add-edit", addEditTask);
 
 module.exports = router;
