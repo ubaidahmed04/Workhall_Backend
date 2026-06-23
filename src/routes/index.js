@@ -89,7 +89,7 @@ const forgetPasswordRoutes = require('./forgetPasswordRoutes');
 const generateOtpRoutes = require('./generateOtpRoutes');
 const verifyOtpRoutes = require('./verifyOtpRoutes');
 const sendOtpRoutes = require('./sendOtpRoutes');
-router.use('/auth', authRoutes);
+router.use('/auth/app', authRoutes);
 router.use('/', attendanceRoutes);
 router.use('/', markAttendanceRoutes);
 router.use('/report', reportRoutes);
