@@ -51,7 +51,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(responseFormatter);
 
 app.use('/uploads', express.static(path.join(process.cwd(), env.UPLOAD_DIR)));
-
+app.use("/assets", express.static("assets"));
 const basePath = `/api/${env.API_VERSION}`;
 app.use(basePath, v1Routes);
 
