@@ -26,7 +26,7 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "")
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin && process.env.NODE_ENV !== "production") {
+      if (!origin) {
         return callback(null, true);
       }
       if (ALLOWED_ORIGINS.includes(origin)) {
