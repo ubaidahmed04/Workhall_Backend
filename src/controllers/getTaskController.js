@@ -105,7 +105,7 @@ exports.getTaskImage = async (req, res) => {
       });
     }
 
-    const imagePath = path.join(__dirname, "../assets/task_images", filename);
+    const imagePath = path.join(__dirname, "../../assets/task_images", filename);
 
     if (!fs.existsSync(imagePath)) {
       console.log("Image not found:", imagePath);

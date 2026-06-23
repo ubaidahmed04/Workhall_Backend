@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const { withConnection } = require('../database/oraclePool');
 // ===================== IMAGE DIRECTORY =====================
-const TASK_IMAGE_DIR = path.join(__dirname, "../assets/task_images");
+const TASK_IMAGE_DIR = path.join(__dirname, "../../assets/task_images");
 
 if (!fs.existsSync(TASK_IMAGE_DIR)) {
   fs.mkdirSync(TASK_IMAGE_DIR, { recursive: true });
