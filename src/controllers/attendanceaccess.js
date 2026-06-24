@@ -1,7 +1,9 @@
 const oracledb = require("oracledb");
-const { withConnection } = require('../database/oraclePool');
+const { getPool } = require("../config/database");
 
 exports.getAttendanceAccess = async (req, res) => {
+  let connection;
+
   try {
     console.log("➡️ ATTENDANCE ACCESS REQUEST:", req.body);
 
@@ -14,7 +16,7 @@ exports.getAttendanceAccess = async (req, res) => {
       });
     }
 
-    await withConnection(async (conn) => {
+    connection = await getPool().getConnection();
     console.log("✅ Oracle connection acquired");
 
     let rows = [];
@@ -24,7 +26,7 @@ exports.getAttendanceAccess = async (req, res) => {
     // STEP 1: TRY PROCEDURE
     // =========================
     try {
-      const result = await conn.execute(
+      const result = await connection.execute(
         `
         BEGIN
             get_attendence_access(
@@ -55,8 +57,16 @@ exports.getAttendanceAccess = async (req, res) => {
       console.log("📊 PROCEDURE RESULT:", rows);
 
       if (rows && rows.length > 0) {
-        // Column 3 = ACCESS_STATUS
-        accessStatus = Number(rows[0][2]);
+        const row = rows[0];
+
+        // Support BOTH ARRAY and OBJECT formats
+        if (Array.isArray(row)) {
+          accessStatus = Number(row[2] || 0);
+        } else {
+          accessStatus = Number(
+            row.ACCESS_STATUS ?? row.access_status ?? row.accessStatus ?? 0,
+          );
+        }
       }
     } catch (procError) {
       console.log("⚠️ PROCEDURE FAILED");
@@ -79,8 +89,18 @@ exports.getAttendanceAccess = async (req, res) => {
 
     try {
       if (rows && rows.length > 0) {
-        branchId = rows[0][0];
-        branchName = rows[0][1];
+        const row = rows[0];
+
+        // Support BOTH ARRAY and OBJECT formats
+        if (Array.isArray(row)) {
+          branchId = row[0];
+          branchName = row[1];
+        } else {
+          branchId = row.BRANCHID ?? row.branchid ?? row.branchId ?? null;
+
+          branchName =
+            row.BRANCHNAME ?? row.branchname ?? row.branchName ?? null;
+        }
       }
     } catch (e) {
       console.log("⚠️ branch fetch error:", e.message);
@@ -98,7 +118,6 @@ exports.getAttendanceAccess = async (req, res) => {
       branchName,
       data: rows,
     });
-      });
   } catch (error) {
     console.error("❌ ATTENDANCE ACCESS ERROR");
     console.error(error);
@@ -126,5 +145,14 @@ exports.getAttendanceAccess = async (req, res) => {
       error: error.message,
       oracleCode: error.code,
     });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+        console.log("🔌 Oracle connection closed");
+      } catch (err) {
+        console.error("⚠️ Error closing connection:", err);
+      }
+    }
   }
 };
