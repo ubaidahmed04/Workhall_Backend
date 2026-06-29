@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
  */
 exports.forgetPassword = async (req, res) => {
   try {
-    console.log("➡️ FORGET PASSWORD REQUEST:", req.body);
+    console.log(" FORGET PASSWORD REQUEST:", req.body);
 
     const { userid, password } = req.body;
 
@@ -21,12 +21,12 @@ exports.forgetPassword = async (req, res) => {
     }
 
     /**
-     * 🔐 HASH PASSWORD
+     *  HASH PASSWORD
      * Same approach used by login controller
      */
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    console.log("🔐 HASHED PASSWORD:", hashedPassword);
+    console.log(" HASHED PASSWORD:", hashedPassword);
 
     await withConnection(async (conn) => {
 
@@ -64,7 +64,7 @@ exports.forgetPassword = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ FORGET PASSWORD ERROR:", error);
+    console.error(" FORGET PASSWORD ERROR:", error);
 
     const isNetworkError =
       error.code === "ECONNREFUSED" ||

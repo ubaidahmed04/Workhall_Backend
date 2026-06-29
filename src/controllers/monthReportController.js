@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getMonthReport = async (req, res) => {
   try {
-    console.log("➡️ GET MONTH REPORT REQUEST:", req.body);
+    console.log(" GET MONTH REPORT REQUEST:", req.body);
 
     const { departmentid, empid, fromDate, toDate } = req.body;
 
@@ -103,7 +103,7 @@ exports.getMonthReport = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ GET MONTH REPORT ERROR:", error);
+    console.error(" GET MONTH REPORT ERROR:", error);
 
     return res.status(500).json({
       success: false,

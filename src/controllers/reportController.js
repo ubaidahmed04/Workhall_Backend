@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getMonthReport = async (req, res) => {
   try {
-    console.log("➡️ MONTH REPORT REQUEST:", req.body);
+    console.log(" MONTH REPORT REQUEST:", req.body);
 
     const { departmentid, fkempid, fromDate, toDate } = req.body;
 
@@ -21,7 +21,7 @@ exports.getMonthReport = async (req, res) => {
 
     await withConnection(async (conn) => {
 
-    console.log("✅ Oracle connection acquired");
+    console.log(" Oracle connection acquired");
 
     const result = await conn.execute(
       `
@@ -58,7 +58,7 @@ exports.getMonthReport = async (req, res) => {
 
     await resultSet.close();
 
-    console.log(`✅ Total Records: ${rows.length}`);
+    console.log(` Total Records: ${rows.length}`);
 
     return res.status(200).json({
       success: true,

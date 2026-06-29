@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getEmployees = async (req, res) => {
   try {
-    console.log("➡️ GET EMPLOYEES REQUEST:", req.body);
+    console.log(" GET EMPLOYEES REQUEST:", req.body);
 
     // 1. Extract parameters from request body
     const { voffset, vlimit, vtype } = req.body;
@@ -30,7 +30,7 @@ exports.getEmployees = async (req, res) => {
     // 3. Acquire connection
     await withConnection(async (conn) => {
 
-    console.log("✅ Oracle connection acquired");
+    console.log(" Oracle connection acquired");
 
     // 4. Execute the stored procedure (now with vtype)
     const result = await conn.execute(

@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.checkInAttendance = async (req, res) => {
   try {
-    console.log("➡️ CHECK-IN REQUEST:", req.body);
+    console.log(" CHECK-IN REQUEST:", req.body);
 
     const {
       fk_empid,
@@ -23,7 +23,12 @@ exports.checkInAttendance = async (req, res) => {
       createdby,
     } = req.body;
 
-    if (!fk_empid || !longitude || !latitude || !branchid) {
+    if (
+      fk_empid == null ||
+      longitude == null ||
+      latitude == null ||
+      branchid == null
+    ) {
       return res.status(400).json({
         success: false,
         message: "Required fields missing",
@@ -32,8 +37,8 @@ exports.checkInAttendance = async (req, res) => {
 
     await withConnection(async (conn) => {
 
-    const result = await conn.execute(
-      `
+      const result = await conn.execute(
+        `
       BEGIN
         add_edit_attendence_app(
           :vfk_empid,
@@ -51,40 +56,44 @@ exports.checkInAttendance = async (req, res) => {
         );
       END;
       `,
-      {
-        vfk_empid: Number(fk_empid),
-        vlongitude: Number(longitude),
-        vlatitude: Number(latitude),
-        vradius: Number(radius),
-        vbranchid: Number(branchid),
+        {
+          vfk_empid: Number(fk_empid),
+          vlongitude: Number(longitude),
+          vlatitude: Number(latitude),
+          vradius: radius !== undefined &&
+            radius !== null &&
+            radius !== ""
+            ? Number(radius)
+            : null,
+          vbranchid: Number(branchid),
 
-        vinternetname: internetname,
-        vip: ip,
-        vinternettype: internettype,
-        vworksheet: worksheet,
-        vcreatedby: createdby,
+          vinternetname: internetname,
+          vip: ip,
+          vinternettype: internettype,
+          vworksheet: worksheet,
+          vcreatedby: createdby,
 
-        vtype: "attendenceworkhall",
+          vtype: "attendenceworkhall",
 
-        vmessage: {
-          dir: oracledb.BIND_OUT,
-          type: oracledb.STRING,
-          maxSize: 500,
+          vmessage: {
+            dir: oracledb.BIND_OUT,
+            type: oracledb.STRING,
+            maxSize: 500,
+          },
         },
-      },
-      { autoCommit: true },
-    );
+        { autoCommit: true },
+      );
 
-    const message = result.outBinds.vmessage || "Check-in processed";
+      const message = result.outBinds.vmessage || "Check-in processed";
 
-    return res.status(200).json({
-      success: true,
-      message,
-    });
-
+      return res.status(200).json({
+        success: true,
+        message,
       });
+
+    });
   } catch (error) {
-    console.error("❌ CHECK-IN ERROR:", error);
+    console.error(" CHECK-IN ERROR:", error);
 
     return res.status(500).json({
       success: false,
@@ -101,7 +110,7 @@ exports.checkInAttendance = async (req, res) => {
  */
 exports.checkOutAttendance = async (req, res) => {
   try {
-    console.log("➡️ CHECK-OUT REQUEST:", req.body);
+    console.log(" CHECK-OUT REQUEST:", req.body);
 
     const {
       fk_empid,
@@ -116,7 +125,12 @@ exports.checkOutAttendance = async (req, res) => {
       createdby,
     } = req.body;
 
-    if (!fk_empid || !longitude || !latitude || !branchid) {
+    if (
+      fk_empid == null ||
+      longitude == null ||
+      latitude == null ||
+      branchid == null
+    ) {
       return res.status(400).json({
         success: false,
         message: "Required fields missing",
@@ -125,8 +139,8 @@ exports.checkOutAttendance = async (req, res) => {
 
     await withConnection(async (conn) => {
 
-    const result = await conn.execute(
-      `
+      const result = await conn.execute(
+        `
       BEGIN
         add_edit_attendence_app(
           :vfk_empid,
@@ -144,38 +158,42 @@ exports.checkOutAttendance = async (req, res) => {
         );
       END;
       `,
-      {
-        vfk_empid: Number(fk_empid),
-        vlongitude: Number(longitude),
-        vlatitude: Number(latitude),
-        vradius: Number(radius),
-        vbranchid: Number(branchid),
+        {
+          vfk_empid: Number(fk_empid),
+          vlongitude: Number(longitude),
+          vlatitude: Number(latitude),
+          vradius: radius !== undefined &&
+            radius !== null &&
+            radius !== ""
+            ? Number(radius)
+            : null,
+          vbranchid: Number(branchid),
 
-        vinternetname: internetname,
-        vip: ip,
-        vinternettype: internettype,
-        vworksheet: worksheet,
-        vcreatedby: createdby,
+          vinternetname: internetname,
+          vip: ip,
+          vinternettype: internettype,
+          vworksheet: worksheet,
+          vcreatedby: createdby,
 
-        vtype: "attendenceworkhall",
+          vtype: "attendenceworkhall",
 
-        vmessage: {
-          dir: oracledb.BIND_OUT,
-          type: oracledb.STRING,
-          maxSize: 500,
+          vmessage: {
+            dir: oracledb.BIND_OUT,
+            type: oracledb.STRING,
+            maxSize: 500,
+          },
         },
-      },
-      { autoCommit: true },
-    );
+        { autoCommit: true },
+      );
 
-    const message = result.outBinds.vmessage || "Check-out processed";
+      const message = result.outBinds.vmessage || "Check-out processed";
 
-    return res.status(200).json({
-      success: true,
-      message,
-    });
-
+      return res.status(200).json({
+        success: true,
+        message,
       });
+
+    });
   } catch (error) {
     console.error("❌ CHECK-OUT ERROR:", error);
 

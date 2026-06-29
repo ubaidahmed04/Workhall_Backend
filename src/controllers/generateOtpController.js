@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.generateOtp = async (req, res) => {
   try {
-    console.log("➡️ GENERATE OTP REQUEST:", req.body);
+    console.log(" GENERATE OTP REQUEST:", req.body);
 
     const { userid, otp } = req.body;
 
@@ -55,7 +55,7 @@ exports.generateOtp = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ GENERATE OTP ERROR:", error);
+    console.error(" GENERATE OTP ERROR:", error);
 
     return res.status(500).json({
       success: false,

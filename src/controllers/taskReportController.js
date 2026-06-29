@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getTaskReport = async (req, res) => {
   try {
-    console.log("➡️ GET TASK REPORT REQUEST:", req.body);
+    console.log(" GET TASK REPORT REQUEST:", req.body);
 
     const { fromdate, todate, empid, taskstatus } = req.body;
 

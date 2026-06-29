@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getAllEmployeeLeaves = async (req, res) => {
   try {
-    console.log("➡️ GET ALL EMPLOYEE LEAVES REQUEST");
+    console.log(" GET ALL EMPLOYEE LEAVES REQUEST");
 
     await withConnection(async (conn) => {
 
@@ -33,7 +33,7 @@ exports.getAllEmployeeLeaves = async (req, res) => {
 
     const resultSet = result.outBinds.retval;
 
-    const rows = await resultSet.getRows(100000);
+    const rows = await resultSet.getRows();
 
     await resultSet.close();
 
@@ -60,7 +60,7 @@ exports.getAllEmployeeLeaves = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ GET ALL EMPLOYEE LEAVES ERROR:", error);
+    console.error(" GET ALL EMPLOYEE LEAVES ERROR:", error);
 
     return res.status(500).json({
       success: false,

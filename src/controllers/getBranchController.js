@@ -8,11 +8,11 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getBranch = async (req, res) => {
   try {
-    console.log("➡️ GET BRANCH REQUEST");
+    console.log(" GET BRANCH REQUEST");
 
+    console.log(" Oracle connection acquired");
     await withConnection(async (conn) => {
 
-    console.log("✅ Oracle connection acquired");
 
     const result = await conn.execute(
       `
@@ -37,7 +37,7 @@ exports.getBranch = async (req, res) => {
 
     await resultSet.close();
 
-    console.log(`📦 TOTAL BRANCHES: ${rows.length}`);
+    console.log(` TOTAL BRANCHES: ${rows.length}`);
 
     return res.status(200).json({
       success: true,
@@ -47,7 +47,7 @@ exports.getBranch = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ GET BRANCH ERROR:", error);
+    console.error(" GET BRANCH ERROR:", error);
 
     return res.status(500).json({
       success: false,

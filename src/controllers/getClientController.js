@@ -8,13 +8,13 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getClient = async (req, res) => {
   try {
-    console.log("➡️ GET CLIENT REQUEST:", req.body);
+    console.log(" GET CLIENT REQUEST:", req.body);
 
     const { startdate, enddate, clientid } = req.body;
 
     await withConnection(async (conn) => {
 
-    console.log("✅ Oracle connection acquired");
+    console.log(" Oracle connection acquired");
 
     const result = await conn.execute(
       `
@@ -52,7 +52,7 @@ exports.getClient = async (req, res) => {
 
     await resultSet.close();
 
-    console.log(`📦 TOTAL CLIENTS: ${rows.length}`);
+    console.log(` TOTAL CLIENTS: ${rows.length}`);
 
     return res.status(200).json({
       success: true,
@@ -62,7 +62,7 @@ exports.getClient = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ GET CLIENT ERROR:", error);
+    console.error(" GET CLIENT ERROR:", error);
 
     return res.status(500).json({
       success: false,

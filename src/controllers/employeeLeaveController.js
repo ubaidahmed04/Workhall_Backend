@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getEmployeeLeaveMobile = async (req, res) => {
   try {
-    console.log("➡️ GET EMPLOYEE LEAVE MOBILE REQUEST:", req.body);
+    console.log(" GET EMPLOYEE LEAVE MOBILE REQUEST:", req.body);
 
     const { empid } = req.body;
 
@@ -24,7 +24,7 @@ exports.getEmployeeLeaveMobile = async (req, res) => {
     const result = await conn.execute(
       `
       BEGIN
-        get_empleave_App(
+        get_empleave_app(
           :vempid,
           :vretval
         );
@@ -68,7 +68,7 @@ exports.getEmployeeLeaveMobile = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ GET EMPLOYEE LEAVE ERROR:", error);
+    console.error(" GET EMPLOYEE LEAVE ERROR:", error);
 
     return res.status(500).json({
       success: false,

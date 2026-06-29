@@ -10,7 +10,7 @@ const fs = require("fs");
  */
 exports.getTask = async (req, res) => {
   try {
-    console.log("➡️ GET TASK REQUEST:", req.body);
+    console.log(" GET TASK REQUEST:", req.body);
 
     const { fromDate, toDate, empid, taskstatus } = req.body;
 
@@ -45,7 +45,7 @@ exports.getTask = async (req, res) => {
     const rows = await resultSet.getRows(100000);
     await resultSet.close();
 
-    // ✅ FIX: normalize image URLs for frontend
+    //  FIX: normalize image URLs for frontend
     const baseUrl = `${req.protocol}://${req.get("host")}`;
 
     const formattedRows = rows.map((task) => {

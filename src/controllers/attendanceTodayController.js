@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getAttendanceToday = async (req, res) => {
   try {
-    console.log("➡️ GET ATTENDANCE TODAY REQUEST");
+    console.log(" GET ATTENDANCE TODAY REQUEST");
 
     await withConnection(async (conn) => {
 
@@ -64,7 +64,7 @@ exports.getAttendanceToday = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ GET ATTENDANCE TODAY ERROR:", error);
+    console.error(" GET ATTENDANCE TODAY ERROR:", error);
 
     return res.status(500).json({
       success: false,

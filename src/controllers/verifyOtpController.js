@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.verifyOtp = async (req, res) => {
   try {
-    console.log("➡️ VERIFY OTP REQUEST:", req.body);
+    console.log(" VERIFY OTP REQUEST:", req.body);
 
     const { userid, otp } = req.body;
 

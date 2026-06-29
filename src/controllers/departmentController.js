@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getDepartments = async (req, res) => {
   try {
-    console.log("➡️ GET DEPARTMENTS REQUEST");
+    console.log(" GET DEPARTMENTS REQUEST");
 
     await withConnection(async (conn) => {
 
@@ -52,7 +52,7 @@ exports.getDepartments = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ GET DEPARTMENTS ERROR:", error);
+    console.error(" GET DEPARTMENTS ERROR:", error);
 
     return res.status(500).json({
       success: false,

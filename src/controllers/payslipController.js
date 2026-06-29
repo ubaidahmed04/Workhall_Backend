@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getPayslip = async (req, res) => {
   try {
-    console.log("➡️ GET PAYSLIP REQUEST:", req.body);
+    console.log(" GET PAYSLIP REQUEST:", req.body);
 
     const { empid, paydate } = req.body;
 

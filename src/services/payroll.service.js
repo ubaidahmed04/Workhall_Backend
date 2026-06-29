@@ -29,7 +29,7 @@ const addEditPayslipService = async (payload) => {
         );
       }
 
-      // ✅ Har entry ke liye fresh INSERT (vpayslipid = null)
+      //  Har entry ke liye fresh INSERT (vpayslipid = null)
       for (const entry of entries) {
         const result = await conn.execute(
           `BEGIN

@@ -3,7 +3,7 @@ const { withConnection } = require("../database/oraclePool");
 
 exports.getAttendanceAccess = async (req, res) => {
   try {
-    console.log("➡️ ATTENDANCE ACCESS REQUEST:", req.body);
+    console.log(" ATTENDANCE ACCESS REQUEST:", req.body);
 
     const { longitude, latitude, radius } = req.body;
 
@@ -68,7 +68,7 @@ exports.getAttendanceAccess = async (req, res) => {
           }
         }
       } catch (procError) {
-        console.error("❌ PROCEDURE ERROR:", procError);
+        console.error(" PROCEDURE ERROR:", procError);
 
         return res.status(500).json({
           success: false,

@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getRolePermissions = async (req, res) => {
   try {
-    console.log("➡️ GET ROLE PERMISSIONS REQUEST:", req.body);
+    console.log(" GET ROLE PERMISSIONS REQUEST:", req.body);
 
     const { roleid } = req.body;
 

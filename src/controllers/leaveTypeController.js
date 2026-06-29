@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.getLeaveType = async (req, res) => {
   try {
-    console.log("➡️ GET LEAVE TYPE REQUEST");
+    console.log(" GET LEAVE TYPE REQUEST");
 
     await withConnection(async (conn) => {
 

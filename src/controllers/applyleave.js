@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.applyLeave = async (req, res) => {
   try {
-    console.log("➡️ APPLY LEAVE REQUEST:", req.body);
+    console.log(" APPLY LEAVE REQUEST:", req.body);
 
     const {
       empleaveid,
@@ -77,7 +77,7 @@ exports.applyLeave = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ APPLY LEAVE ERROR:", error);
+    console.error(" APPLY LEAVE ERROR:", error);
 
     return res.status(500).json({
       success: false,

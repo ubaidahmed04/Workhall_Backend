@@ -8,7 +8,7 @@ const { withConnection } = require('../database/oraclePool');
  */
 exports.logoutApp = async (req, res) => {
   try {
-    console.log("➡️ LOGOUT REQUEST:", req.body);
+    console.log(" LOGOUT REQUEST:", req.body);
 
     const { userid } = req.body;
 

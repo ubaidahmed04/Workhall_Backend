@@ -5,7 +5,7 @@ const { getTask, getTaskImage } = require("../controllers/getTaskController");
 
 router.post("/task/get", getTask);
 
-// ✅ image route
+//  image route
 router.get("/task/image/:filename", getTaskImage);
 
 module.exports = router;

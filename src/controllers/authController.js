@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 
 exports.login = async (req, res) => {
   try {
-    console.log("➡️ LOGIN REQUEST BODY:", req.body);
+    console.log(" LOGIN REQUEST BODY:", req.body);
 
     const { username, password } = req.body;
 
@@ -17,7 +17,7 @@ exports.login = async (req, res) => {
 
     await withConnection(async (conn) => {
 
-    console.log("✅ Oracle connection acquired");
+    console.log(" Oracle connection acquired");
 
     // 1. Get user data from login_app_data
     const result = await conn.execute(
@@ -51,7 +51,7 @@ exports.login = async (req, res) => {
 
     const message = result.outBinds.vmsg;
 
-    console.log("📦 OUT MESSAGE:", message);
+    console.log(" OUT MESSAGE:", message);
 
     // If login_app_data indicates an error (except "Already Log in"), return early
     if (message !== "Success" && message !== "This User is Already Log in") {
@@ -74,7 +74,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    console.log("📦 USER DATA:", rows);
+    console.log(" USER DATA:", rows);
 
     const user = rows[0];
 
@@ -89,11 +89,11 @@ exports.login = async (req, res) => {
       user.userpassword ||
       Object.values(user)[5];
 
-    console.log("🔐 HASH PASSWORD:", dbPass);
+    console.log(" HASH PASSWORD:", dbPass);
 
     const isMatch = await bcrypt.compare(password, dbPass);
 
-    console.log("🔐 PASSWORD MATCH:", isMatch);
+    console.log(" PASSWORD MATCH:", isMatch);
 
     // 2. Determine vcorrect based on password match
     const vcorrect = isMatch ? 1 : 0;
@@ -148,7 +148,7 @@ exports.login = async (req, res) => {
     );
 
     const verifyMessage = verifyResult.outBinds.vmsg;
-    console.log("📦 VERIFY MESSAGE:", verifyMessage);
+    console.log(" VERIFY MESSAGE:", verifyMessage);
 
     // 5. Prepare response
     if (isMatch) {
@@ -167,7 +167,7 @@ exports.login = async (req, res) => {
 
       });
   } catch (error) {
-    console.error("❌ LOGIN ERROR");
+    console.error(" LOGIN ERROR");
     console.error(error);
 
     const isNetworkError =
