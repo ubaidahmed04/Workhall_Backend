@@ -46,35 +46,35 @@ exports.getTask = async (req, res) => {
     await resultSet.close();
 
     //  FIX: normalize image URLs for frontend
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    // const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-    const formattedRows = rows.map((task) => {
-      let image = task.IMAGE || task.TASK_IMAGE || task.image_url;
+    // const formattedRows = rows.map((task) => {
+    //   let image = task.IMAGE || task.TASK_IMAGE || task.image_url;
 
-      if (!image) return task;
+    //   if (!image) return task;
 
-      // remove localhost issues
-      image = image.replace("localhost:3000", req.get("host"));
+    //   // remove localhost issues
+    //   image = image.replace("localhost:3000", req.get("host"));
 
-      // if already full URL
-      if (image.startsWith("http")) {
-        return {
-          ...task,
-          image_url: image,
-        };
-      }
+    //   // if already full URL
+    //   if (image.startsWith("http")) {
+    //     return {
+    //       ...task,
+    //       image_url: image,
+    //     };
+    //   }
 
       // if filename only → serve from backend route
-      return {
-        ...task,
-        image_url: `${baseUrl}/api/task/image/${image}`,
-      };
-    });
+    //   return {
+    //     ...task,
+    //     // image_url: `${baseUrl}/api/task/image/${image}`,
+    //   };
+    // });
 
     return res.status(200).json({
       success: true,
-      count: formattedRows.length,
-      data: formattedRows,
+      count: rows.length,
+      data: rows,
     });
 
       });
