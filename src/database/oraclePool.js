@@ -8,8 +8,8 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 oracledb.autoCommit = false;
 
 oracledb.initOracleClient({
-    // libDir:"/cloudclusters/instantclient_23_5" // for production 
-    libDir:"../../Oracle/instantclient_21_3" // for local 
+    libDir:"/cloudclusters/instantclient_23_5" // for production 
+    // libDir:"../../Oracle/instantclient_21_3" // for local 
 })
 let pool;
 
