@@ -4,6 +4,6 @@ const router = express.Router();
 const { addEditTask } = require("../controllers/taskController");
 const upload = require("../middleware/upload");
 
-router.post("/task/add-edit", upload.single("taskImage"),addEditTask);
+router.post("/task/add-edit", upload.single("vtaskdoc"),addEditTask);
 
 module.exports = router;
